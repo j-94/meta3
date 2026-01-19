@@ -1,7 +1,7 @@
 # Meta3 Nomenclature & Concepts
 
-Generated: `2026-01-19T18:55:51Z`
-Run: `nomenclature-20260119T185551Z`
+Generated: `2026-01-19T18:58:03Z`
+Run: `nomenclature-20260119T185803Z`
 Engine repo: `/Users/jobs/Desktop/tmp-meta3-engine-test`
 
 This glossary is generated from engine repo data (capability catalogs + system docs).
@@ -52,7 +52,7 @@ A hypergraph derived from the capability catalog that links capabilities to trig
 
 ## capability_report
 
-_Definition pending (add/curate)._
+generate English capability/module report (`meta3-graph-core/src/bin/capability_report.rs`)
 
 - Sources:
   - `meta3-graph-core/SYSTEM_PROMPT.md` (graph_core_prompt)
@@ -74,28 +74,28 @@ Standalone Utility: flux
 
 ## graph_capability_graph
 
-_Definition pending (add/curate)._
+build **catalog-focused** capability hypergraph (`meta3-graph-core/src/bin/graph_capability_graph.rs`)
 
 - Sources:
   - `meta3-graph-core/SYSTEM_PROMPT.md` (graph_core_prompt)
 
 ## graph_context_bundle
 
-_Definition pending (add/curate)._
+create context + tasks from a hypergraph (`meta3-graph-core/src/bin/graph_context_bundle.rs`)
 
 - Sources:
   - `meta3-graph-core/SYSTEM_PROMPT.md` (graph_core_prompt)
 
 ## graph_harness_emit
 
-_Definition pending (add/curate)._
+append harness/loop nodes for auditability (`meta3-graph-core/src/bin/graph_harness_emit.rs`)
 
 - Sources:
   - `meta3-graph-core/SYSTEM_PROMPT.md` (graph_core_prompt)
 
 ## graph_probe
 
-_Definition pending (add/curate)._
+summarize a hypergraph (`meta3-graph-core/src/bin/graph_probe.rs`)
 
 - Sources:
   - `meta3-graph-core/SYSTEM_PROMPT.md` (graph_core_prompt)
@@ -109,14 +109,14 @@ A runtime that consumes events, evaluates state transitions as graph deltas, val
 
 ## Graph.Mutate
 
-_Definition pending (add/curate)._
+Propose graph update
 
 - Sources:
   - `meta3-causal-kernel/SYSTEM_PROMPT.md` (system_prompt)
 
 ## Graph.Query
 
-_Definition pending (add/curate)._
+Query the State Hypergraph
 
 - Sources:
   - `meta3-causal-kernel/SYSTEM_PROMPT.md` (system_prompt)
@@ -147,8 +147,9 @@ Standalone Utility: interaction_hypergraph
 
 ## JIT Verification
 
-_Definition pending (add/curate)._
+Just-in-time verification: validate proposed actions/deltas against invariants before execution, producing accept/reject decisions with evidence.
 
+- Aliases: `Just-In-Time verification`, `LeJIT`
 - Sources:
   - `(curation)` (curation)
 
@@ -176,7 +177,7 @@ Just-in-time verification layer that validates proposed actions/deltas against i
 
 ## merge_mission_hypergraph
 
-_Definition pending (add/curate)._
+merge `mission_graph.json` into a hypergraph (`meta3-graph-core/src/bin/merge_mission_hypergraph.rs`)
 
 - Sources:
   - `meta3-graph-core/SYSTEM_PROMPT.md` (graph_core_prompt)
@@ -212,7 +213,7 @@ Operational rule: don’t rely on memory. Every claim and state change should be
 
 ## render_hypergraph
 
-_Definition pending (add/curate)._
+render a hypergraph to self-contained HTML (`meta3-graph-core/src/bin/render_hypergraph.rs`)
 
 - Sources:
   - `meta3-graph-core/SYSTEM_PROMPT.md` (graph_core_prompt)

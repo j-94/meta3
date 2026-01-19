@@ -1,7 +1,7 @@
 {
   "version": "v1",
-  "run_id": "nomenclature-20260119T185551Z",
-  "generated_at": "2026-01-19T18:55:51Z",
+  "run_id": "nomenclature-20260119T185803Z",
+  "generated_at": "2026-01-19T18:58:03Z",
   "engine_repo": "/Users/jobs/Desktop/tmp-meta3-engine-test",
   "curation": {
     "path": "concepts/curation.json",
@@ -109,7 +109,7 @@
     {
       "id": "concept:capability-report",
       "term": "capability_report",
-      "definition": "",
+      "definition": "generate English capability/module report (`meta3-graph-core/src/bin/capability_report.rs`)",
       "aliases": [],
       "sources": [
         {
@@ -147,7 +147,7 @@
     {
       "id": "concept:graph-capability-graph",
       "term": "graph_capability_graph",
-      "definition": "",
+      "definition": "build **catalog-focused** capability hypergraph (`meta3-graph-core/src/bin/graph_capability_graph.rs`)",
       "aliases": [],
       "sources": [
         {
@@ -159,7 +159,7 @@
     {
       "id": "concept:graph-context-bundle",
       "term": "graph_context_bundle",
-      "definition": "",
+      "definition": "create context + tasks from a hypergraph (`meta3-graph-core/src/bin/graph_context_bundle.rs`)",
       "aliases": [],
       "sources": [
         {
@@ -171,7 +171,7 @@
     {
       "id": "concept:graph-harness-emit",
       "term": "graph_harness_emit",
-      "definition": "",
+      "definition": "append harness/loop nodes for auditability (`meta3-graph-core/src/bin/graph_harness_emit.rs`)",
       "aliases": [],
       "sources": [
         {
@@ -183,7 +183,7 @@
     {
       "id": "concept:graph-probe",
       "term": "graph_probe",
-      "definition": "",
+      "definition": "summarize a hypergraph (`meta3-graph-core/src/bin/graph_probe.rs`)",
       "aliases": [],
       "sources": [
         {
@@ -207,7 +207,7 @@
     {
       "id": "concept:graphmutate",
       "term": "Graph.Mutate",
-      "definition": "",
+      "definition": "Propose graph update",
       "aliases": [],
       "sources": [
         {
@@ -219,7 +219,7 @@
     {
       "id": "concept:graphquery",
       "term": "Graph.Query",
-      "definition": "",
+      "definition": "Query the State Hypergraph",
       "aliases": [],
       "sources": [
         {
@@ -278,8 +278,11 @@
     {
       "id": "concept:jit-verification",
       "term": "JIT Verification",
-      "definition": "",
-      "aliases": [],
+      "definition": "Just-in-time verification: validate proposed actions/deltas against invariants before execution, producing accept/reject decisions with evidence.",
+      "aliases": [
+        "Just-In-Time verification",
+        "LeJIT"
+      ],
       "sources": [
         {
           "path": "(curation)",
@@ -329,7 +332,7 @@
     {
       "id": "concept:merge-mission-hypergraph",
       "term": "merge_mission_hypergraph",
-      "definition": "",
+      "definition": "merge `mission_graph.json` into a hypergraph (`meta3-graph-core/src/bin/merge_mission_hypergraph.rs`)",
       "aliases": [],
       "sources": [
         {
@@ -392,7 +395,7 @@
     {
       "id": "concept:render-hypergraph",
       "term": "render_hypergraph",
-      "definition": "",
+      "definition": "render a hypergraph to self-contained HTML (`meta3-graph-core/src/bin/render_hypergraph.rs`)",
       "aliases": [],
       "sources": [
         {

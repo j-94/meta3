@@ -100,7 +100,7 @@
       "kind": "concept",
       "label": "capability_report",
       "data": {
-        "definition": "",
+        "definition": "generate English capability/module report (`meta3-graph-core/src/bin/capability_report.rs`)",
         "aliases": [],
         "sources": [
           {
@@ -147,7 +147,7 @@
       "kind": "concept",
       "label": "graph_capability_graph",
       "data": {
-        "definition": "",
+        "definition": "build **catalog-focused** capability hypergraph (`meta3-graph-core/src/bin/graph_capability_graph.rs`)",
         "aliases": [],
         "sources": [
           {
@@ -162,7 +162,7 @@
       "kind": "concept",
       "label": "graph_context_bundle",
       "data": {
-        "definition": "",
+        "definition": "create context + tasks from a hypergraph (`meta3-graph-core/src/bin/graph_context_bundle.rs`)",
         "aliases": [],
         "sources": [
           {
@@ -177,7 +177,7 @@
       "kind": "concept",
       "label": "graph_harness_emit",
       "data": {
-        "definition": "",
+        "definition": "append harness/loop nodes for auditability (`meta3-graph-core/src/bin/graph_harness_emit.rs`)",
         "aliases": [],
         "sources": [
           {
@@ -192,7 +192,7 @@
       "kind": "concept",
       "label": "graph_probe",
       "data": {
-        "definition": "",
+        "definition": "summarize a hypergraph (`meta3-graph-core/src/bin/graph_probe.rs`)",
         "aliases": [],
         "sources": [
           {
@@ -222,7 +222,7 @@
       "kind": "concept",
       "label": "Graph.Mutate",
       "data": {
-        "definition": "",
+        "definition": "Propose graph update",
         "aliases": [],
         "sources": [
           {
@@ -237,7 +237,7 @@
       "kind": "concept",
       "label": "Graph.Query",
       "data": {
-        "definition": "",
+        "definition": "Query the State Hypergraph",
         "aliases": [],
         "sources": [
           {
@@ -308,8 +308,11 @@
       "kind": "concept",
       "label": "JIT Verification",
       "data": {
-        "definition": "",
-        "aliases": [],
+        "definition": "Just-in-time verification: validate proposed actions/deltas against invariants before execution, producing accept/reject decisions with evidence.",
+        "aliases": [
+          "Just-In-Time verification",
+          "LeJIT"
+        ],
         "sources": [
           {
             "path": "(curation)",
@@ -371,7 +374,7 @@
       "kind": "concept",
       "label": "merge_mission_hypergraph",
       "data": {
-        "definition": "",
+        "definition": "merge `mission_graph.json` into a hypergraph (`meta3-graph-core/src/bin/merge_mission_hypergraph.rs`)",
         "aliases": [],
         "sources": [
           {
@@ -449,7 +452,7 @@
       "kind": "concept",
       "label": "render_hypergraph",
       "data": {
-        "definition": "",
+        "definition": "render a hypergraph to self-contained HTML (`meta3-graph-core/src/bin/render_hypergraph.rs`)",
         "aliases": [],
         "sources": [
           {
@@ -1095,8 +1098,8 @@
     }
   ],
   "metadata": {
-    "run_id": "nomenclature-20260119T185551Z",
-    "generated_at": "2026-01-19T18:55:51Z",
+    "run_id": "nomenclature-20260119T185803Z",
+    "generated_at": "2026-01-19T18:58:03Z",
     "source": "nomenclature_extractor"
   }
 }

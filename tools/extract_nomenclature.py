@@ -148,6 +148,48 @@ def extract_backticked_terms(md: str) -> List[str]:
     # Extract `like_this` and `Tool.Name` and `graph_capability_graph`
     return [m.group(1).strip() for m in re.finditer(r"`([^`]{2,80})`", md)]
 
+def extract_inline_definitions(md: str) -> List[Tuple[str, str]]:
+    """
+    Extract simple Markdown list definitions of the form:
+      - `term` — description
+      - `term` - description
+    """
+    out: List[Tuple[str, str]] = []
+    for line in md.splitlines():
+        l = line.strip()
+        m = re.match(r"^[-*]\s+`([^`]{2,80})`\s*[—-]\s*(.+)$", l)
+        if not m:
+            continue
+        term = m.group(1).strip()
+        desc = m.group(2).strip()
+        if term and desc:
+            out.append((term, desc))
+    return out
+
+
+def extract_markdown_table_terms(md: str) -> List[Tuple[str, str]]:
+    """
+    Extract 2-column (term, description) pairs from Markdown tables.
+    Intended for sections like "Available Capabilities".
+    """
+    out: List[Tuple[str, str]] = []
+    for line in md.splitlines():
+        l = line.strip()
+        if not (l.startswith("|") and "`" in l):
+            continue
+        # | `FileSystem.Write` | Write content to file | ...
+        m = re.match(r"^\|\s*`([^`]{2,80})`\s*\|\s*([^|]{2,200})\|", l)
+        if not m:
+            continue
+        term = m.group(1).strip()
+        desc = m.group(2).strip()
+        # Skip header rows
+        if term.lower() in {"capability", "tool id", "id"}:
+            continue
+        if term and desc and not set(desc) <= {"-", " "}:
+            out.append((term, desc))
+    return out
+
 
 def normalize_term(term: str) -> Optional[str]:
     t = term.strip()
@@ -432,6 +474,18 @@ def main() -> int:
         if not p.exists():
             continue
         txt = read_text(p)
+        # Prefer direct "term — description" patterns when present.
+        for term, desc in extract_inline_definitions(txt):
+            t = normalize_term(term)
+            if not t:
+                continue
+            merge_concept(concepts, t, first_sentence(desc), SourceRef(path=str(p.relative_to(engine_repo)), kind=kind))
+        # Pull terminology from tables (e.g., semantic capability interface).
+        for term, desc in extract_markdown_table_terms(txt):
+            t = normalize_term(term)
+            if not t:
+                continue
+            merge_concept(concepts, t, first_sentence(desc), SourceRef(path=str(p.relative_to(engine_repo)), kind=kind))
         for h in extract_markdown_headings(txt):
             t = normalize_term(h)
             if not t:

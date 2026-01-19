@@ -47,6 +47,7 @@
     "Receipts Beat Recollection": "Operational rule: don’t rely on memory. Every claim and state change should be backed by an artifact (receipt, graph packet, report).",
     "UTIR": "Universal Tool Invocation Receipt: a structured evidence stream used to audit and reproduce actions (writes/execs) performed by the system.",
     "LeJIT": "Just-in-time verification layer that validates proposed actions/deltas against invariants before they are executed.",
+    "JIT Verification": "Just-in-time verification: validate proposed actions/deltas against invariants before execution, producing accept/reject decisions with evidence.",
     "Capability Catalog": "A machine-readable list of what the system can do (capabilities), including triggers, types, and source modules.",
     "Capability Graph": "A hypergraph derived from the capability catalog that links capabilities to triggers, types, and source modules (not a filesystem 'contains' graph).",
     "Capability Report (English)": "A human-readable report explaining what each capability/module does, how to invoke it, and where it is implemented.",
@@ -55,10 +56,10 @@
   },
   "aliases": {
     "LeJIT": ["JIT Verification", "Just-In-Time verification"],
+    "JIT Verification": ["LeJIT", "Just-In-Time verification"],
     "Capability Catalog": ["catalog"],
     "Capability Graph": ["graph_capability_graph"],
     "Capability Report (English)": ["capability_report"],
     "Receipts Beat Recollection": ["immutable evidence", "receipts"]
   }
 }
-
