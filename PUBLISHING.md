@@ -13,18 +13,12 @@ git commit -m "chore: initial canonical seed"
 ## 2) Create the GitHub repo (via `gh`)
 
 Pick your org/user and repo name, then:
-```bash
-gh repo create <ORG_OR_USER>/meta3-canonical --public --source . --remote origin --push
-```
-
-If you want it private:
-```bash
-gh repo create <ORG_OR_USER>/meta3-canonical --private --source . --remote origin --push
-```
+This repo is published as:
+`j-94/meta3`
 
 ## 3) Ongoing sync from the engine repo
 
-From the engine repo root, re-export:
+From the engine repo root, re-export into your local checkout of `j-94/meta3`:
 ```bash
 rsync -a --exclude='.DS_Store' canonical/ _export/meta3-canonical/
 ```
@@ -36,4 +30,3 @@ git add -A
 git commit -m "sync: refresh canonical content"
 git push
 ```
-
