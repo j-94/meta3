@@ -1,0 +1,64 @@
+{
+  "allow_terms": [
+    "State Hypergraph",
+    "Graph Transducer Runtime",
+    "Receipts Beat Recollection",
+    "UTIR",
+    "LeJIT",
+    "JIT Verification",
+    "Capability Catalog",
+    "Capability Graph",
+    "Capability Report (English)",
+    "ToolHub",
+    "Meta3 Graph Core",
+    "Graph.Query",
+    "Graph.Mutate",
+    "Graph.Query",
+    "graph_capability_graph",
+    "capability_report",
+    "graph_probe",
+    "graph_context_bundle",
+    "graph_harness_emit",
+    "merge_mission_hypergraph",
+    "render_hypergraph"
+  ],
+  "deny_terms": [
+    "constraints",
+    "content",
+    "contains",
+    "edges",
+    "entities",
+    "inputs",
+    "outputs",
+    "notes",
+    "usage",
+    "examples",
+    "testing",
+    "development",
+    "quick start",
+    "installation",
+    "response protocol",
+    "available capabilities",
+    "critical reminders"
+  ],
+  "definitions": {
+    "State Hypergraph": "The state model of the system: nodes represent entities (files, concepts, artifacts, tasks) and hyperedges represent causal relationships that can connect multiple entities at once.",
+    "Graph Transducer Runtime": "A runtime that consumes events, evaluates state transitions as graph deltas, validates them against invariants, and applies them while emitting durable evidence (receipts).",
+    "Receipts Beat Recollection": "Operational rule: don’t rely on memory. Every claim and state change should be backed by an artifact (receipt, graph packet, report).",
+    "UTIR": "Universal Tool Invocation Receipt: a structured evidence stream used to audit and reproduce actions (writes/execs) performed by the system.",
+    "LeJIT": "Just-in-time verification layer that validates proposed actions/deltas against invariants before they are executed.",
+    "Capability Catalog": "A machine-readable list of what the system can do (capabilities), including triggers, types, and source modules.",
+    "Capability Graph": "A hypergraph derived from the capability catalog that links capabilities to triggers, types, and source modules (not a filesystem 'contains' graph).",
+    "Capability Report (English)": "A human-readable report explaining what each capability/module does, how to invoke it, and where it is implemented.",
+    "ToolHub": "The capability scanner/catalog generator (ToolHub) used to enumerate available capabilities and tools.",
+    "Meta3 Graph Core": "Deterministic Rust kernel that reads ops packets / graph deltas and reifies them into reality with auditable receipts."
+  },
+  "aliases": {
+    "LeJIT": ["JIT Verification", "Just-In-Time verification"],
+    "Capability Catalog": ["catalog"],
+    "Capability Graph": ["graph_capability_graph"],
+    "Capability Report (English)": ["capability_report"],
+    "Receipts Beat Recollection": ["immutable evidence", "receipts"]
+  }
+}
+

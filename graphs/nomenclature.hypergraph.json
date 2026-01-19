@@ -1,0 +1,1102 @@
+{
+  "id": "nomenclature",
+  "nodes": [
+    {
+      "id": "concept:agi-solver",
+      "kind": "concept",
+      "label": "AGI Solver",
+      "data": {
+        "definition": "Optimal Path Finding",
+        "aliases": [],
+        "sources": [
+          {
+            "path": "dist/meta3-engine-v0.5.0/config/capabilities.json",
+            "kind": "capability_catalog"
+          }
+        ]
+      }
+    },
+    {
+      "id": "concept:amplify-signal",
+      "kind": "concept",
+      "label": "amplify_signal",
+      "data": {
+        "definition": "Standalone Utility: amplify_signal",
+        "aliases": [],
+        "sources": [
+          {
+            "path": "dist/meta3-engine-v0.5.0/config/capabilities.json",
+            "kind": "capability_catalog"
+          }
+        ]
+      }
+    },
+    {
+      "id": "concept:antigravity-history-explorer",
+      "kind": "concept",
+      "label": "antigravity_history_explorer",
+      "data": {
+        "definition": "Standalone Utility: antigravity_history_explorer",
+        "aliases": [],
+        "sources": [
+          {
+            "path": "dist/meta3-engine-v0.5.0/config/capabilities.json",
+            "kind": "capability_catalog"
+          }
+        ]
+      }
+    },
+    {
+      "id": "concept:binary",
+      "kind": "concept",
+      "label": "binary",
+      "data": {
+        "definition": "A capability classification used in the catalog.",
+        "aliases": [],
+        "sources": [
+          {
+            "path": "dist/meta3-engine-v0.5.0/config/capabilities.json",
+            "kind": "capability_catalog"
+          }
+        ]
+      }
+    },
+    {
+      "id": "concept:capability-catalog",
+      "kind": "concept",
+      "label": "Capability Catalog",
+      "data": {
+        "definition": "A machine-readable list of what the system can do (capabilities), including triggers, types, and source modules.",
+        "aliases": [
+          "catalog"
+        ],
+        "sources": [
+          {
+            "path": "(curation)",
+            "kind": "curation"
+          }
+        ]
+      }
+    },
+    {
+      "id": "concept:capability-graph",
+      "kind": "concept",
+      "label": "Capability Graph",
+      "data": {
+        "definition": "A hypergraph derived from the capability catalog that links capabilities to triggers, types, and source modules (not a filesystem 'contains' graph).",
+        "aliases": [
+          "graph_capability_graph"
+        ],
+        "sources": [
+          {
+            "path": "(curation)",
+            "kind": "curation"
+          }
+        ]
+      }
+    },
+    {
+      "id": "concept:capability-report",
+      "kind": "concept",
+      "label": "capability_report",
+      "data": {
+        "definition": "",
+        "aliases": [],
+        "sources": [
+          {
+            "path": "meta3-graph-core/SYSTEM_PROMPT.md",
+            "kind": "graph_core_prompt"
+          }
+        ]
+      }
+    },
+    {
+      "id": "concept:capability-report-english",
+      "kind": "concept",
+      "label": "Capability Report (English)",
+      "data": {
+        "definition": "A human-readable report explaining what each capability/module does, how to invoke it, and where it is implemented.",
+        "aliases": [
+          "capability_report"
+        ],
+        "sources": [
+          {
+            "path": "(curation)",
+            "kind": "curation"
+          }
+        ]
+      }
+    },
+    {
+      "id": "concept:flux",
+      "kind": "concept",
+      "label": "flux",
+      "data": {
+        "definition": "Standalone Utility: flux",
+        "aliases": [],
+        "sources": [
+          {
+            "path": "dist/meta3-engine-v0.5.0/config/capabilities.json",
+            "kind": "capability_catalog"
+          }
+        ]
+      }
+    },
+    {
+      "id": "concept:graph-capability-graph",
+      "kind": "concept",
+      "label": "graph_capability_graph",
+      "data": {
+        "definition": "",
+        "aliases": [],
+        "sources": [
+          {
+            "path": "meta3-graph-core/SYSTEM_PROMPT.md",
+            "kind": "graph_core_prompt"
+          }
+        ]
+      }
+    },
+    {
+      "id": "concept:graph-context-bundle",
+      "kind": "concept",
+      "label": "graph_context_bundle",
+      "data": {
+        "definition": "",
+        "aliases": [],
+        "sources": [
+          {
+            "path": "meta3-graph-core/SYSTEM_PROMPT.md",
+            "kind": "graph_core_prompt"
+          }
+        ]
+      }
+    },
+    {
+      "id": "concept:graph-harness-emit",
+      "kind": "concept",
+      "label": "graph_harness_emit",
+      "data": {
+        "definition": "",
+        "aliases": [],
+        "sources": [
+          {
+            "path": "meta3-graph-core/SYSTEM_PROMPT.md",
+            "kind": "graph_core_prompt"
+          }
+        ]
+      }
+    },
+    {
+      "id": "concept:graph-probe",
+      "kind": "concept",
+      "label": "graph_probe",
+      "data": {
+        "definition": "",
+        "aliases": [],
+        "sources": [
+          {
+            "path": "meta3-graph-core/SYSTEM_PROMPT.md",
+            "kind": "graph_core_prompt"
+          }
+        ]
+      }
+    },
+    {
+      "id": "concept:graph-transducer-runtime",
+      "kind": "concept",
+      "label": "Graph Transducer Runtime",
+      "data": {
+        "definition": "A runtime that consumes events, evaluates state transitions as graph deltas, validates them against invariants, and applies them while emitting durable evidence (receipts).",
+        "aliases": [],
+        "sources": [
+          {
+            "path": "(curation)",
+            "kind": "curation"
+          }
+        ]
+      }
+    },
+    {
+      "id": "concept:graphmutate",
+      "kind": "concept",
+      "label": "Graph.Mutate",
+      "data": {
+        "definition": "",
+        "aliases": [],
+        "sources": [
+          {
+            "path": "meta3-causal-kernel/SYSTEM_PROMPT.md",
+            "kind": "system_prompt"
+          }
+        ]
+      }
+    },
+    {
+      "id": "concept:graphquery",
+      "kind": "concept",
+      "label": "Graph.Query",
+      "data": {
+        "definition": "",
+        "aliases": [],
+        "sources": [
+          {
+            "path": "meta3-causal-kernel/SYSTEM_PROMPT.md",
+            "kind": "system_prompt"
+          }
+        ]
+      }
+    },
+    {
+      "id": "concept:hybrid-chat",
+      "kind": "concept",
+      "label": "Hybrid Chat",
+      "data": {
+        "definition": "LLM + Graph Tracking",
+        "aliases": [],
+        "sources": [
+          {
+            "path": "dist/meta3-engine-v0.5.0/config/capabilities.json",
+            "kind": "capability_catalog"
+          }
+        ]
+      }
+    },
+    {
+      "id": "concept:hypergraph",
+      "kind": "concept",
+      "label": "HyperGraph",
+      "data": {
+        "definition": "Meta6 Abstract Machine",
+        "aliases": [
+          "State Hypergraph",
+          "hypergraph"
+        ],
+        "sources": [
+          {
+            "path": "dist/meta3-engine-v0.5.0/config/capabilities.json",
+            "kind": "capability_catalog"
+          },
+          {
+            "path": "(curation)",
+            "kind": "curation"
+          }
+        ]
+      }
+    },
+    {
+      "id": "concept:interaction-hypergraph",
+      "kind": "concept",
+      "label": "interaction_hypergraph",
+      "data": {
+        "definition": "Standalone Utility: interaction_hypergraph",
+        "aliases": [],
+        "sources": [
+          {
+            "path": "dist/meta3-engine-v0.5.0/config/capabilities.json",
+            "kind": "capability_catalog"
+          },
+          {
+            "path": "meta3-graph-core/SYSTEM_REPORT.md",
+            "kind": "system_report"
+          }
+        ]
+      }
+    },
+    {
+      "id": "concept:jit-verification",
+      "kind": "concept",
+      "label": "JIT Verification",
+      "data": {
+        "definition": "",
+        "aliases": [],
+        "sources": [
+          {
+            "path": "(curation)",
+            "kind": "curation"
+          }
+        ]
+      }
+    },
+    {
+      "id": "concept:kernel-interception",
+      "kind": "concept",
+      "label": "kernel_interception",
+      "data": {
+        "definition": "A capability classification used in the catalog.",
+        "aliases": [],
+        "sources": [
+          {
+            "path": "dist/meta3-engine-v0.5.0/config/capabilities.json",
+            "kind": "capability_catalog"
+          }
+        ]
+      }
+    },
+    {
+      "id": "concept:learning-solver",
+      "kind": "concept",
+      "label": "LEARNING SOLVER",
+      "data": {
+        "definition": "Heuristic + Multiway Verification",
+        "aliases": [],
+        "sources": [
+          {
+            "path": "dist/meta3-engine-v0.5.0/config/capabilities.json",
+            "kind": "capability_catalog"
+          }
+        ]
+      }
+    },
+    {
+      "id": "concept:lejit",
+      "kind": "concept",
+      "label": "LeJIT",
+      "data": {
+        "definition": "Just-in-time verification layer that validates proposed actions/deltas against invariants before they are executed.",
+        "aliases": [
+          "JIT Verification",
+          "Just-In-Time verification"
+        ],
+        "sources": [
+          {
+            "path": "(curation)",
+            "kind": "curation"
+          }
+        ]
+      }
+    },
+    {
+      "id": "concept:merge-mission-hypergraph",
+      "kind": "concept",
+      "label": "merge_mission_hypergraph",
+      "data": {
+        "definition": "",
+        "aliases": [],
+        "sources": [
+          {
+            "path": "meta3-graph-core/SYSTEM_PROMPT.md",
+            "kind": "graph_core_prompt"
+          }
+        ]
+      }
+    },
+    {
+      "id": "concept:meta3-graph-core",
+      "kind": "concept",
+      "label": "Meta3 Graph Core",
+      "data": {
+        "definition": "Deterministic Rust kernel that reads ops packets / graph deltas and reifies them into reality with auditable receipts.",
+        "aliases": [],
+        "sources": [
+          {
+            "path": "(curation)",
+            "kind": "curation"
+          }
+        ]
+      }
+    },
+    {
+      "id": "concept:negentropy",
+      "kind": "concept",
+      "label": "negentropy",
+      "data": {
+        "definition": "Standalone Utility: negentropy",
+        "aliases": [],
+        "sources": [
+          {
+            "path": "dist/meta3-engine-v0.5.0/config/capabilities.json",
+            "kind": "capability_catalog"
+          }
+        ]
+      }
+    },
+    {
+      "id": "concept:oracle",
+      "kind": "concept",
+      "label": "oracle",
+      "data": {
+        "definition": "Standalone Utility: oracle",
+        "aliases": [],
+        "sources": [
+          {
+            "path": "dist/meta3-engine-v0.5.0/config/capabilities.json",
+            "kind": "capability_catalog"
+          }
+        ]
+      }
+    },
+    {
+      "id": "concept:receipts-beat-recollection",
+      "kind": "concept",
+      "label": "Receipts Beat Recollection",
+      "data": {
+        "definition": "Operational rule: don\u2019t rely on memory. Every claim and state change should be backed by an artifact (receipt, graph packet, report).",
+        "aliases": [
+          "immutable evidence",
+          "receipts"
+        ],
+        "sources": [
+          {
+            "path": "(curation)",
+            "kind": "curation"
+          }
+        ]
+      }
+    },
+    {
+      "id": "concept:render-hypergraph",
+      "kind": "concept",
+      "label": "render_hypergraph",
+      "data": {
+        "definition": "",
+        "aliases": [],
+        "sources": [
+          {
+            "path": "meta3-graph-core/SYSTEM_PROMPT.md",
+            "kind": "graph_core_prompt"
+          }
+        ]
+      }
+    },
+    {
+      "id": "concept:ruliad",
+      "kind": "concept",
+      "label": "Ruliad",
+      "data": {
+        "definition": "Formal Rewrite System - Wolfram Physics",
+        "aliases": [],
+        "sources": [
+          {
+            "path": "dist/meta3-engine-v0.5.0/config/capabilities.json",
+            "kind": "capability_catalog"
+          }
+        ]
+      }
+    },
+    {
+      "id": "concept:state-hypergraph",
+      "kind": "concept",
+      "label": "State Hypergraph",
+      "data": {
+        "definition": "The state model of the system: nodes represent entities (files, concepts, artifacts, tasks) and hyperedges represent causal relationships that can connect multiple entities at once.",
+        "aliases": [],
+        "sources": [
+          {
+            "path": "(curation)",
+            "kind": "curation"
+          }
+        ]
+      }
+    },
+    {
+      "id": "concept:task-graph",
+      "kind": "concept",
+      "label": "Task Graph",
+      "data": {
+        "definition": "LLM-based Task Decomposition",
+        "aliases": [],
+        "sources": [
+          {
+            "path": "dist/meta3-engine-v0.5.0/config/capabilities.json",
+            "kind": "capability_catalog"
+          }
+        ]
+      }
+    },
+    {
+      "id": "concept:thought-tree",
+      "kind": "concept",
+      "label": "Thought Tree",
+      "data": {
+        "definition": "ASCII Hierarchical Render",
+        "aliases": [],
+        "sources": [
+          {
+            "path": "dist/meta3-engine-v0.5.0/config/capabilities.json",
+            "kind": "capability_catalog"
+          }
+        ]
+      }
+    },
+    {
+      "id": "concept:toolhub",
+      "kind": "concept",
+      "label": "ToolHub",
+      "data": {
+        "definition": "The capability scanner/catalog generator (ToolHub) used to enumerate available capabilities and tools.",
+        "aliases": [],
+        "sources": [
+          {
+            "path": "(curation)",
+            "kind": "curation"
+          }
+        ]
+      }
+    },
+    {
+      "id": "concept:tsp",
+      "kind": "concept",
+      "label": "TSP",
+      "data": {
+        "definition": "Traveling Salesman Problem - Ruliad Way",
+        "aliases": [],
+        "sources": [
+          {
+            "path": "dist/meta3-engine-v0.5.0/config/capabilities.json",
+            "kind": "capability_catalog"
+          }
+        ]
+      }
+    },
+    {
+      "id": "concept:utir",
+      "kind": "concept",
+      "label": "UTIR",
+      "data": {
+        "definition": "Universal Tool Invocation Receipt: a structured evidence stream used to audit and reproduce actions (writes/execs) performed by the system.",
+        "aliases": [
+          "artifact stream",
+          "receipts"
+        ],
+        "sources": [
+          {
+            "path": "(curation)",
+            "kind": "curation"
+          }
+        ]
+      }
+    },
+    {
+      "id": "source_kind:capability_catalog",
+      "kind": "source_kind",
+      "label": "capability_catalog",
+      "data": null
+    },
+    {
+      "id": "source_kind:curation",
+      "kind": "source_kind",
+      "label": "curation",
+      "data": null
+    },
+    {
+      "id": "source_kind:graph_core_prompt",
+      "kind": "source_kind",
+      "label": "graph_core_prompt",
+      "data": null
+    },
+    {
+      "id": "source_kind:system_prompt",
+      "kind": "source_kind",
+      "label": "system_prompt",
+      "data": null
+    },
+    {
+      "id": "source_kind:system_report",
+      "kind": "source_kind",
+      "label": "system_report",
+      "data": null
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "edge:derived_from:0",
+      "kind": "derived_from",
+      "causes": [
+        "source_kind:capability_catalog"
+      ],
+      "effects": [
+        "concept:agi-solver"
+      ],
+      "data": {
+        "path": "dist/meta3-engine-v0.5.0/config/capabilities.json"
+      }
+    },
+    {
+      "id": "edge:derived_from:1",
+      "kind": "derived_from",
+      "causes": [
+        "source_kind:capability_catalog"
+      ],
+      "effects": [
+        "concept:amplify-signal"
+      ],
+      "data": {
+        "path": "dist/meta3-engine-v0.5.0/config/capabilities.json"
+      }
+    },
+    {
+      "id": "edge:derived_from:2",
+      "kind": "derived_from",
+      "causes": [
+        "source_kind:capability_catalog"
+      ],
+      "effects": [
+        "concept:antigravity-history-explorer"
+      ],
+      "data": {
+        "path": "dist/meta3-engine-v0.5.0/config/capabilities.json"
+      }
+    },
+    {
+      "id": "edge:derived_from:3",
+      "kind": "derived_from",
+      "causes": [
+        "source_kind:capability_catalog"
+      ],
+      "effects": [
+        "concept:binary"
+      ],
+      "data": {
+        "path": "dist/meta3-engine-v0.5.0/config/capabilities.json"
+      }
+    },
+    {
+      "id": "edge:derived_from:4",
+      "kind": "derived_from",
+      "causes": [
+        "source_kind:curation"
+      ],
+      "effects": [
+        "concept:capability-catalog"
+      ],
+      "data": {
+        "path": "(curation)"
+      }
+    },
+    {
+      "id": "edge:derived_from:5",
+      "kind": "derived_from",
+      "causes": [
+        "source_kind:curation"
+      ],
+      "effects": [
+        "concept:capability-graph"
+      ],
+      "data": {
+        "path": "(curation)"
+      }
+    },
+    {
+      "id": "edge:derived_from:6",
+      "kind": "derived_from",
+      "causes": [
+        "source_kind:graph_core_prompt"
+      ],
+      "effects": [
+        "concept:capability-report"
+      ],
+      "data": {
+        "path": "meta3-graph-core/SYSTEM_PROMPT.md"
+      }
+    },
+    {
+      "id": "edge:derived_from:7",
+      "kind": "derived_from",
+      "causes": [
+        "source_kind:curation"
+      ],
+      "effects": [
+        "concept:capability-report-english"
+      ],
+      "data": {
+        "path": "(curation)"
+      }
+    },
+    {
+      "id": "edge:derived_from:8",
+      "kind": "derived_from",
+      "causes": [
+        "source_kind:capability_catalog"
+      ],
+      "effects": [
+        "concept:flux"
+      ],
+      "data": {
+        "path": "dist/meta3-engine-v0.5.0/config/capabilities.json"
+      }
+    },
+    {
+      "id": "edge:derived_from:9",
+      "kind": "derived_from",
+      "causes": [
+        "source_kind:graph_core_prompt"
+      ],
+      "effects": [
+        "concept:graph-capability-graph"
+      ],
+      "data": {
+        "path": "meta3-graph-core/SYSTEM_PROMPT.md"
+      }
+    },
+    {
+      "id": "edge:derived_from:10",
+      "kind": "derived_from",
+      "causes": [
+        "source_kind:graph_core_prompt"
+      ],
+      "effects": [
+        "concept:graph-context-bundle"
+      ],
+      "data": {
+        "path": "meta3-graph-core/SYSTEM_PROMPT.md"
+      }
+    },
+    {
+      "id": "edge:derived_from:11",
+      "kind": "derived_from",
+      "causes": [
+        "source_kind:graph_core_prompt"
+      ],
+      "effects": [
+        "concept:graph-harness-emit"
+      ],
+      "data": {
+        "path": "meta3-graph-core/SYSTEM_PROMPT.md"
+      }
+    },
+    {
+      "id": "edge:derived_from:12",
+      "kind": "derived_from",
+      "causes": [
+        "source_kind:graph_core_prompt"
+      ],
+      "effects": [
+        "concept:graph-probe"
+      ],
+      "data": {
+        "path": "meta3-graph-core/SYSTEM_PROMPT.md"
+      }
+    },
+    {
+      "id": "edge:derived_from:13",
+      "kind": "derived_from",
+      "causes": [
+        "source_kind:curation"
+      ],
+      "effects": [
+        "concept:graph-transducer-runtime"
+      ],
+      "data": {
+        "path": "(curation)"
+      }
+    },
+    {
+      "id": "edge:derived_from:14",
+      "kind": "derived_from",
+      "causes": [
+        "source_kind:system_prompt"
+      ],
+      "effects": [
+        "concept:graphmutate"
+      ],
+      "data": {
+        "path": "meta3-causal-kernel/SYSTEM_PROMPT.md"
+      }
+    },
+    {
+      "id": "edge:derived_from:15",
+      "kind": "derived_from",
+      "causes": [
+        "source_kind:system_prompt"
+      ],
+      "effects": [
+        "concept:graphquery"
+      ],
+      "data": {
+        "path": "meta3-causal-kernel/SYSTEM_PROMPT.md"
+      }
+    },
+    {
+      "id": "edge:derived_from:16",
+      "kind": "derived_from",
+      "causes": [
+        "source_kind:capability_catalog"
+      ],
+      "effects": [
+        "concept:hybrid-chat"
+      ],
+      "data": {
+        "path": "dist/meta3-engine-v0.5.0/config/capabilities.json"
+      }
+    },
+    {
+      "id": "edge:derived_from:17",
+      "kind": "derived_from",
+      "causes": [
+        "source_kind:capability_catalog"
+      ],
+      "effects": [
+        "concept:hypergraph"
+      ],
+      "data": {
+        "path": "dist/meta3-engine-v0.5.0/config/capabilities.json"
+      }
+    },
+    {
+      "id": "edge:derived_from:18",
+      "kind": "derived_from",
+      "causes": [
+        "source_kind:curation"
+      ],
+      "effects": [
+        "concept:hypergraph"
+      ],
+      "data": {
+        "path": "(curation)"
+      }
+    },
+    {
+      "id": "edge:derived_from:19",
+      "kind": "derived_from",
+      "causes": [
+        "source_kind:capability_catalog"
+      ],
+      "effects": [
+        "concept:interaction-hypergraph"
+      ],
+      "data": {
+        "path": "dist/meta3-engine-v0.5.0/config/capabilities.json"
+      }
+    },
+    {
+      "id": "edge:derived_from:20",
+      "kind": "derived_from",
+      "causes": [
+        "source_kind:system_report"
+      ],
+      "effects": [
+        "concept:interaction-hypergraph"
+      ],
+      "data": {
+        "path": "meta3-graph-core/SYSTEM_REPORT.md"
+      }
+    },
+    {
+      "id": "edge:derived_from:21",
+      "kind": "derived_from",
+      "causes": [
+        "source_kind:curation"
+      ],
+      "effects": [
+        "concept:jit-verification"
+      ],
+      "data": {
+        "path": "(curation)"
+      }
+    },
+    {
+      "id": "edge:derived_from:22",
+      "kind": "derived_from",
+      "causes": [
+        "source_kind:capability_catalog"
+      ],
+      "effects": [
+        "concept:kernel-interception"
+      ],
+      "data": {
+        "path": "dist/meta3-engine-v0.5.0/config/capabilities.json"
+      }
+    },
+    {
+      "id": "edge:derived_from:23",
+      "kind": "derived_from",
+      "causes": [
+        "source_kind:capability_catalog"
+      ],
+      "effects": [
+        "concept:learning-solver"
+      ],
+      "data": {
+        "path": "dist/meta3-engine-v0.5.0/config/capabilities.json"
+      }
+    },
+    {
+      "id": "edge:derived_from:24",
+      "kind": "derived_from",
+      "causes": [
+        "source_kind:curation"
+      ],
+      "effects": [
+        "concept:lejit"
+      ],
+      "data": {
+        "path": "(curation)"
+      }
+    },
+    {
+      "id": "edge:derived_from:25",
+      "kind": "derived_from",
+      "causes": [
+        "source_kind:graph_core_prompt"
+      ],
+      "effects": [
+        "concept:merge-mission-hypergraph"
+      ],
+      "data": {
+        "path": "meta3-graph-core/SYSTEM_PROMPT.md"
+      }
+    },
+    {
+      "id": "edge:derived_from:26",
+      "kind": "derived_from",
+      "causes": [
+        "source_kind:curation"
+      ],
+      "effects": [
+        "concept:meta3-graph-core"
+      ],
+      "data": {
+        "path": "(curation)"
+      }
+    },
+    {
+      "id": "edge:derived_from:27",
+      "kind": "derived_from",
+      "causes": [
+        "source_kind:capability_catalog"
+      ],
+      "effects": [
+        "concept:negentropy"
+      ],
+      "data": {
+        "path": "dist/meta3-engine-v0.5.0/config/capabilities.json"
+      }
+    },
+    {
+      "id": "edge:derived_from:28",
+      "kind": "derived_from",
+      "causes": [
+        "source_kind:capability_catalog"
+      ],
+      "effects": [
+        "concept:oracle"
+      ],
+      "data": {
+        "path": "dist/meta3-engine-v0.5.0/config/capabilities.json"
+      }
+    },
+    {
+      "id": "edge:derived_from:29",
+      "kind": "derived_from",
+      "causes": [
+        "source_kind:curation"
+      ],
+      "effects": [
+        "concept:receipts-beat-recollection"
+      ],
+      "data": {
+        "path": "(curation)"
+      }
+    },
+    {
+      "id": "edge:derived_from:30",
+      "kind": "derived_from",
+      "causes": [
+        "source_kind:graph_core_prompt"
+      ],
+      "effects": [
+        "concept:render-hypergraph"
+      ],
+      "data": {
+        "path": "meta3-graph-core/SYSTEM_PROMPT.md"
+      }
+    },
+    {
+      "id": "edge:derived_from:31",
+      "kind": "derived_from",
+      "causes": [
+        "source_kind:capability_catalog"
+      ],
+      "effects": [
+        "concept:ruliad"
+      ],
+      "data": {
+        "path": "dist/meta3-engine-v0.5.0/config/capabilities.json"
+      }
+    },
+    {
+      "id": "edge:derived_from:32",
+      "kind": "derived_from",
+      "causes": [
+        "source_kind:curation"
+      ],
+      "effects": [
+        "concept:state-hypergraph"
+      ],
+      "data": {
+        "path": "(curation)"
+      }
+    },
+    {
+      "id": "edge:derived_from:33",
+      "kind": "derived_from",
+      "causes": [
+        "source_kind:capability_catalog"
+      ],
+      "effects": [
+        "concept:task-graph"
+      ],
+      "data": {
+        "path": "dist/meta3-engine-v0.5.0/config/capabilities.json"
+      }
+    },
+    {
+      "id": "edge:derived_from:34",
+      "kind": "derived_from",
+      "causes": [
+        "source_kind:capability_catalog"
+      ],
+      "effects": [
+        "concept:thought-tree"
+      ],
+      "data": {
+        "path": "dist/meta3-engine-v0.5.0/config/capabilities.json"
+      }
+    },
+    {
+      "id": "edge:derived_from:35",
+      "kind": "derived_from",
+      "causes": [
+        "source_kind:curation"
+      ],
+      "effects": [
+        "concept:toolhub"
+      ],
+      "data": {
+        "path": "(curation)"
+      }
+    },
+    {
+      "id": "edge:derived_from:36",
+      "kind": "derived_from",
+      "causes": [
+        "source_kind:capability_catalog"
+      ],
+      "effects": [
+        "concept:tsp"
+      ],
+      "data": {
+        "path": "dist/meta3-engine-v0.5.0/config/capabilities.json"
+      }
+    },
+    {
+      "id": "edge:derived_from:37",
+      "kind": "derived_from",
+      "causes": [
+        "source_kind:curation"
+      ],
+      "effects": [
+        "concept:utir"
+      ],
+      "data": {
+        "path": "(curation)"
+      }
+    }
+  ],
+  "metadata": {
+    "run_id": "nomenclature-20260119T184141Z",
+    "generated_at": "2026-01-19T18:41:41Z",
+    "source": "nomenclature_extractor"
+  }
+}

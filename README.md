@@ -1,12 +1,12 @@
-# Canonical Repo (In-Tree Seed)
+# Meta3 ∛ Nomenclature & Concepts (Canonical)
 
-This directory is a **canonical seed** for standardizing Meta3’s reusable knowledge:
+This repo is the **canonical** home for standardizing Meta3’s reusable knowledge:
 
 1. **Use-case libraries**: distilled “how-to” modules (inputs → process → outputs → evidence).
 2. **Multi-agent role prompts**: stable agent roles that produce compatible artifacts.
 3. **Canonical intellectual graph**: a minimal, regenerable hypergraph describing the system’s core concepts.
 
-This is intentionally stored **in-tree** (not a separate Git repo) so it can evolve via PRs alongside the engine.
+This is intended to be used alongside the main engine repo, but lives as a standalone GitHub repo.
 
 ## Layout
 
@@ -23,4 +23,3 @@ Each library module should include:
 - “How to run” commands
 - Evidence paths (graphs/reports/receipts)
 - Failure modes and how to validate
-

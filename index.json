@@ -4,44 +4,47 @@
   "libraries": [
     {
       "id": "capability_graph",
-      "path": "canonical/libraries/capability_graph.md"
+      "path": "libraries/capability_graph.md"
     },
     {
       "id": "capability_report",
-      "path": "canonical/libraries/capability_report.md"
+      "path": "libraries/capability_report.md"
+    },
+    {
+      "id": "nomenclature_extraction",
+      "path": "libraries/nomenclature_extraction.md"
     },
     {
       "id": "mission_merge",
-      "path": "canonical/libraries/mission_merge.md"
+      "path": "libraries/mission_merge.md"
     },
     {
       "id": "receipts_utir",
-      "path": "canonical/libraries/receipts_utir.md"
+      "path": "libraries/receipts_utir.md"
     }
   ],
   "agents": [
     {
       "id": "mapper",
-      "path": "canonical/agents/mapper.system.md"
+      "path": "agents/mapper.system.md"
     },
     {
       "id": "lens",
-      "path": "canonical/agents/lens.system.md"
+      "path": "agents/lens.system.md"
     },
     {
       "id": "evaluator",
-      "path": "canonical/agents/evaluator.system.md"
+      "path": "agents/evaluator.system.md"
     },
     {
       "id": "librarian",
-      "path": "canonical/agents/librarian.system.md"
+      "path": "agents/librarian.system.md"
     }
   ],
   "graphs": [
     {
       "id": "canonical_core",
-      "path": "canonical/graphs/canonical_core.hypergraph.json"
+      "path": "graphs/canonical_core.hypergraph.json"
     }
   ]
 }
-

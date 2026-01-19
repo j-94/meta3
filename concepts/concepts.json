@@ -1,0 +1,492 @@
+{
+  "version": "v1",
+  "run_id": "nomenclature-20260119T184141Z",
+  "generated_at": "2026-01-19T18:41:41Z",
+  "engine_repo": "/Users/jobs/Desktop/tmp-meta3-engine-test",
+  "curation": {
+    "path": "concepts/curation.json",
+    "applied": true
+  },
+  "inputs": [
+    {
+      "path": "dist/meta3-engine-v0.5.0/config/capabilities.json",
+      "kind": "capability_catalog",
+      "exists": true
+    },
+    {
+      "path": "meta3-causal-kernel/SYSTEM_PROMPT.md",
+      "kind": "system_prompt",
+      "exists": true
+    },
+    {
+      "path": "meta3-graph-core/SYSTEM_REPORT.md",
+      "kind": "system_report",
+      "exists": true
+    },
+    {
+      "path": "meta3-graph-core/SYSTEM_PROMPT.md",
+      "kind": "graph_core_prompt",
+      "exists": true
+    }
+  ],
+  "concepts": [
+    {
+      "id": "concept:agi-solver",
+      "term": "AGI Solver",
+      "definition": "Optimal Path Finding",
+      "aliases": [],
+      "sources": [
+        {
+          "path": "dist/meta3-engine-v0.5.0/config/capabilities.json",
+          "kind": "capability_catalog"
+        }
+      ]
+    },
+    {
+      "id": "concept:amplify-signal",
+      "term": "amplify_signal",
+      "definition": "Standalone Utility: amplify_signal",
+      "aliases": [],
+      "sources": [
+        {
+          "path": "dist/meta3-engine-v0.5.0/config/capabilities.json",
+          "kind": "capability_catalog"
+        }
+      ]
+    },
+    {
+      "id": "concept:antigravity-history-explorer",
+      "term": "antigravity_history_explorer",
+      "definition": "Standalone Utility: antigravity_history_explorer",
+      "aliases": [],
+      "sources": [
+        {
+          "path": "dist/meta3-engine-v0.5.0/config/capabilities.json",
+          "kind": "capability_catalog"
+        }
+      ]
+    },
+    {
+      "id": "concept:binary",
+      "term": "binary",
+      "definition": "A capability classification used in the catalog.",
+      "aliases": [],
+      "sources": [
+        {
+          "path": "dist/meta3-engine-v0.5.0/config/capabilities.json",
+          "kind": "capability_catalog"
+        }
+      ]
+    },
+    {
+      "id": "concept:capability-catalog",
+      "term": "Capability Catalog",
+      "definition": "A machine-readable list of what the system can do (capabilities), including triggers, types, and source modules.",
+      "aliases": [
+        "catalog"
+      ],
+      "sources": [
+        {
+          "path": "(curation)",
+          "kind": "curation"
+        }
+      ]
+    },
+    {
+      "id": "concept:capability-graph",
+      "term": "Capability Graph",
+      "definition": "A hypergraph derived from the capability catalog that links capabilities to triggers, types, and source modules (not a filesystem 'contains' graph).",
+      "aliases": [
+        "graph_capability_graph"
+      ],
+      "sources": [
+        {
+          "path": "(curation)",
+          "kind": "curation"
+        }
+      ]
+    },
+    {
+      "id": "concept:capability-report",
+      "term": "capability_report",
+      "definition": "",
+      "aliases": [],
+      "sources": [
+        {
+          "path": "meta3-graph-core/SYSTEM_PROMPT.md",
+          "kind": "graph_core_prompt"
+        }
+      ]
+    },
+    {
+      "id": "concept:capability-report-english",
+      "term": "Capability Report (English)",
+      "definition": "A human-readable report explaining what each capability/module does, how to invoke it, and where it is implemented.",
+      "aliases": [
+        "capability_report"
+      ],
+      "sources": [
+        {
+          "path": "(curation)",
+          "kind": "curation"
+        }
+      ]
+    },
+    {
+      "id": "concept:flux",
+      "term": "flux",
+      "definition": "Standalone Utility: flux",
+      "aliases": [],
+      "sources": [
+        {
+          "path": "dist/meta3-engine-v0.5.0/config/capabilities.json",
+          "kind": "capability_catalog"
+        }
+      ]
+    },
+    {
+      "id": "concept:graph-capability-graph",
+      "term": "graph_capability_graph",
+      "definition": "",
+      "aliases": [],
+      "sources": [
+        {
+          "path": "meta3-graph-core/SYSTEM_PROMPT.md",
+          "kind": "graph_core_prompt"
+        }
+      ]
+    },
+    {
+      "id": "concept:graph-context-bundle",
+      "term": "graph_context_bundle",
+      "definition": "",
+      "aliases": [],
+      "sources": [
+        {
+          "path": "meta3-graph-core/SYSTEM_PROMPT.md",
+          "kind": "graph_core_prompt"
+        }
+      ]
+    },
+    {
+      "id": "concept:graph-harness-emit",
+      "term": "graph_harness_emit",
+      "definition": "",
+      "aliases": [],
+      "sources": [
+        {
+          "path": "meta3-graph-core/SYSTEM_PROMPT.md",
+          "kind": "graph_core_prompt"
+        }
+      ]
+    },
+    {
+      "id": "concept:graph-probe",
+      "term": "graph_probe",
+      "definition": "",
+      "aliases": [],
+      "sources": [
+        {
+          "path": "meta3-graph-core/SYSTEM_PROMPT.md",
+          "kind": "graph_core_prompt"
+        }
+      ]
+    },
+    {
+      "id": "concept:graph-transducer-runtime",
+      "term": "Graph Transducer Runtime",
+      "definition": "A runtime that consumes events, evaluates state transitions as graph deltas, validates them against invariants, and applies them while emitting durable evidence (receipts).",
+      "aliases": [],
+      "sources": [
+        {
+          "path": "(curation)",
+          "kind": "curation"
+        }
+      ]
+    },
+    {
+      "id": "concept:graphmutate",
+      "term": "Graph.Mutate",
+      "definition": "",
+      "aliases": [],
+      "sources": [
+        {
+          "path": "meta3-causal-kernel/SYSTEM_PROMPT.md",
+          "kind": "system_prompt"
+        }
+      ]
+    },
+    {
+      "id": "concept:graphquery",
+      "term": "Graph.Query",
+      "definition": "",
+      "aliases": [],
+      "sources": [
+        {
+          "path": "meta3-causal-kernel/SYSTEM_PROMPT.md",
+          "kind": "system_prompt"
+        }
+      ]
+    },
+    {
+      "id": "concept:hybrid-chat",
+      "term": "Hybrid Chat",
+      "definition": "LLM + Graph Tracking",
+      "aliases": [],
+      "sources": [
+        {
+          "path": "dist/meta3-engine-v0.5.0/config/capabilities.json",
+          "kind": "capability_catalog"
+        }
+      ]
+    },
+    {
+      "id": "concept:hypergraph",
+      "term": "HyperGraph",
+      "definition": "Meta6 Abstract Machine",
+      "aliases": [
+        "State Hypergraph",
+        "hypergraph"
+      ],
+      "sources": [
+        {
+          "path": "dist/meta3-engine-v0.5.0/config/capabilities.json",
+          "kind": "capability_catalog"
+        },
+        {
+          "path": "(curation)",
+          "kind": "curation"
+        }
+      ]
+    },
+    {
+      "id": "concept:interaction-hypergraph",
+      "term": "interaction_hypergraph",
+      "definition": "Standalone Utility: interaction_hypergraph",
+      "aliases": [],
+      "sources": [
+        {
+          "path": "dist/meta3-engine-v0.5.0/config/capabilities.json",
+          "kind": "capability_catalog"
+        },
+        {
+          "path": "meta3-graph-core/SYSTEM_REPORT.md",
+          "kind": "system_report"
+        }
+      ]
+    },
+    {
+      "id": "concept:jit-verification",
+      "term": "JIT Verification",
+      "definition": "",
+      "aliases": [],
+      "sources": [
+        {
+          "path": "(curation)",
+          "kind": "curation"
+        }
+      ]
+    },
+    {
+      "id": "concept:kernel-interception",
+      "term": "kernel_interception",
+      "definition": "A capability classification used in the catalog.",
+      "aliases": [],
+      "sources": [
+        {
+          "path": "dist/meta3-engine-v0.5.0/config/capabilities.json",
+          "kind": "capability_catalog"
+        }
+      ]
+    },
+    {
+      "id": "concept:learning-solver",
+      "term": "LEARNING SOLVER",
+      "definition": "Heuristic + Multiway Verification",
+      "aliases": [],
+      "sources": [
+        {
+          "path": "dist/meta3-engine-v0.5.0/config/capabilities.json",
+          "kind": "capability_catalog"
+        }
+      ]
+    },
+    {
+      "id": "concept:lejit",
+      "term": "LeJIT",
+      "definition": "Just-in-time verification layer that validates proposed actions/deltas against invariants before they are executed.",
+      "aliases": [
+        "JIT Verification",
+        "Just-In-Time verification"
+      ],
+      "sources": [
+        {
+          "path": "(curation)",
+          "kind": "curation"
+        }
+      ]
+    },
+    {
+      "id": "concept:merge-mission-hypergraph",
+      "term": "merge_mission_hypergraph",
+      "definition": "",
+      "aliases": [],
+      "sources": [
+        {
+          "path": "meta3-graph-core/SYSTEM_PROMPT.md",
+          "kind": "graph_core_prompt"
+        }
+      ]
+    },
+    {
+      "id": "concept:meta3-graph-core",
+      "term": "Meta3 Graph Core",
+      "definition": "Deterministic Rust kernel that reads ops packets / graph deltas and reifies them into reality with auditable receipts.",
+      "aliases": [],
+      "sources": [
+        {
+          "path": "(curation)",
+          "kind": "curation"
+        }
+      ]
+    },
+    {
+      "id": "concept:negentropy",
+      "term": "negentropy",
+      "definition": "Standalone Utility: negentropy",
+      "aliases": [],
+      "sources": [
+        {
+          "path": "dist/meta3-engine-v0.5.0/config/capabilities.json",
+          "kind": "capability_catalog"
+        }
+      ]
+    },
+    {
+      "id": "concept:oracle",
+      "term": "oracle",
+      "definition": "Standalone Utility: oracle",
+      "aliases": [],
+      "sources": [
+        {
+          "path": "dist/meta3-engine-v0.5.0/config/capabilities.json",
+          "kind": "capability_catalog"
+        }
+      ]
+    },
+    {
+      "id": "concept:receipts-beat-recollection",
+      "term": "Receipts Beat Recollection",
+      "definition": "Operational rule: don\u2019t rely on memory. Every claim and state change should be backed by an artifact (receipt, graph packet, report).",
+      "aliases": [
+        "immutable evidence",
+        "receipts"
+      ],
+      "sources": [
+        {
+          "path": "(curation)",
+          "kind": "curation"
+        }
+      ]
+    },
+    {
+      "id": "concept:render-hypergraph",
+      "term": "render_hypergraph",
+      "definition": "",
+      "aliases": [],
+      "sources": [
+        {
+          "path": "meta3-graph-core/SYSTEM_PROMPT.md",
+          "kind": "graph_core_prompt"
+        }
+      ]
+    },
+    {
+      "id": "concept:ruliad",
+      "term": "Ruliad",
+      "definition": "Formal Rewrite System - Wolfram Physics",
+      "aliases": [],
+      "sources": [
+        {
+          "path": "dist/meta3-engine-v0.5.0/config/capabilities.json",
+          "kind": "capability_catalog"
+        }
+      ]
+    },
+    {
+      "id": "concept:state-hypergraph",
+      "term": "State Hypergraph",
+      "definition": "The state model of the system: nodes represent entities (files, concepts, artifacts, tasks) and hyperedges represent causal relationships that can connect multiple entities at once.",
+      "aliases": [],
+      "sources": [
+        {
+          "path": "(curation)",
+          "kind": "curation"
+        }
+      ]
+    },
+    {
+      "id": "concept:task-graph",
+      "term": "Task Graph",
+      "definition": "LLM-based Task Decomposition",
+      "aliases": [],
+      "sources": [
+        {
+          "path": "dist/meta3-engine-v0.5.0/config/capabilities.json",
+          "kind": "capability_catalog"
+        }
+      ]
+    },
+    {
+      "id": "concept:thought-tree",
+      "term": "Thought Tree",
+      "definition": "ASCII Hierarchical Render",
+      "aliases": [],
+      "sources": [
+        {
+          "path": "dist/meta3-engine-v0.5.0/config/capabilities.json",
+          "kind": "capability_catalog"
+        }
+      ]
+    },
+    {
+      "id": "concept:toolhub",
+      "term": "ToolHub",
+      "definition": "The capability scanner/catalog generator (ToolHub) used to enumerate available capabilities and tools.",
+      "aliases": [],
+      "sources": [
+        {
+          "path": "(curation)",
+          "kind": "curation"
+        }
+      ]
+    },
+    {
+      "id": "concept:tsp",
+      "term": "TSP",
+      "definition": "Traveling Salesman Problem - Ruliad Way",
+      "aliases": [],
+      "sources": [
+        {
+          "path": "dist/meta3-engine-v0.5.0/config/capabilities.json",
+          "kind": "capability_catalog"
+        }
+      ]
+    },
+    {
+      "id": "concept:utir",
+      "term": "UTIR",
+      "definition": "Universal Tool Invocation Receipt: a structured evidence stream used to audit and reproduce actions (writes/execs) performed by the system.",
+      "aliases": [
+        "artifact stream",
+        "receipts"
+      ],
+      "sources": [
+        {
+          "path": "(curation)",
+          "kind": "curation"
+        }
+      ]
+    }
+  ]
+}
