@@ -32,6 +32,15 @@ Outputs:
 - `concepts/glossary.md`
 - `graphs/nomenclature.hypergraph.json`
 
+## Showcases (Impressive Outputs)
+
+- `showcases/README.md` — what to look at
+- `showcases/nomenclature/index.html` — explorable concept hypergraph viewer (local file)
+- `showcases/capability-graph/index.html` — explorable capability graph viewer (local file)
+
+If you enable GitHub Pages (Settings → Pages → “Deploy from a branch” → `/docs`):
+- `/docs/index.html` becomes a landing page with links to the two viewers.
+
 ## Quality Bar
 
 Each library module should include:

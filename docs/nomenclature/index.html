@@ -1,0 +1,372 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Meta3 Hypergraph</title>
+  <style>
+    :root {{
+      --bg: #070813;
+      --panel: rgba(16, 19, 38, 0.86);
+      --panel2: rgba(16, 19, 38, 0.62);
+      --border: rgba(120, 160, 255, 0.22);
+      --text: #e9efff;
+      --muted: #9fb2d8;
+      --accent: #7aa7ff;
+      --hot: #ff5d8f;
+      --ok: #41d6b2;
+      --warn: #ffd166;
+    }}
+    html, body {{ height: 100%; }}
+    body {{
+      margin: 0;
+      overflow: hidden;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      background:
+        radial-gradient(1200px 800px at 20% 30%, rgba(122,167,255,0.18), transparent 55%),
+        radial-gradient(900px 650px at 80% 70%, rgba(255,93,143,0.14), transparent 50%),
+        var(--bg);
+      color: var(--text);
+    }}
+    #hud {{
+      position: fixed; inset: 12px 12px auto 12px;
+      display: grid; grid-template-columns: 1fr auto;
+      gap: 10px; align-items: start; z-index: 10;
+      pointer-events: none;
+    }}
+    #card {{
+      pointer-events: auto;
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      backdrop-filter: blur(10px);
+      border-radius: 14px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+      min-width: 320px;
+    }}
+    #title {{ font-weight: 800; letter-spacing: 0.3px; }}
+    #subtitle {{ color: var(--muted); font-size: 12px; margin-top: 2px; }}
+    #metrics {{ margin-top: 10px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }}
+    .m {{ padding: 10px; border-radius: 12px; background: var(--panel2); border: 1px solid rgba(255,255,255,0.06); }}
+    .mv {{ font-size: 18px; font-weight: 800; }}
+    .ml {{ font-size: 11px; color: var(--muted); margin-top: 2px; }}
+    #controls {{ margin-top: 10px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }}
+    .btn {{ pointer-events: auto; cursor: pointer; border: 1px solid var(--border); background: rgba(9, 12, 24, 0.65); color: var(--text); padding: 8px 10px; border-radius: 12px; font-size: 12px; }}
+    .btn:hover {{ border-color: rgba(122,167,255,0.6); }}
+    #turnWrap {{ pointer-events: auto; display: flex; gap: 8px; align-items: center; }}
+    #turn {{ width: 260px; }}
+    #links {{ pointer-events: auto; display: flex; gap: 10px; justify-content: flex-end; }}
+    #links a {{ color: var(--accent); text-decoration: none; font-size: 12px; padding: 9px 10px; border-radius: 12px; border: 1px solid var(--border); background: rgba(9, 12, 24, 0.65); }}
+    #links a:hover {{ border-color: rgba(122,167,255,0.6); }}
+    #canvas {{ position: fixed; inset: 0; }}
+    #tip {{
+      position: fixed; left: 0; top: 0; transform: translate(-9999px, -9999px);
+      max-width: 420px;
+      padding: 10px 12px;
+      background: rgba(8, 10, 20, 0.92);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      font-size: 12px;
+      color: var(--text);
+      box-shadow: 0 12px 26px rgba(0,0,0,0.45);
+      white-space: pre-wrap;
+      z-index: 20;
+      pointer-events: none;
+    }}
+    #tip .k {{ color: var(--muted); font-size: 11px; }}
+    #hint {{ position: fixed; right: 12px; bottom: 12px; padding: 10px 12px; border: 1px solid rgba(255,255,255,0.08); background: rgba(16,19,38,0.6); border-radius: 12px; color: var(--muted); font-size: 12px; }}
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <div id="hud">
+    <div id="card">
+      <div id="title">Meta3 Hypergraph</div>
+      <div id="subtitle">Hierarchical causal structure (run → goal → turns → tools → outcomes).</div>
+      <div id="metrics">
+        <div class="m"><div class="mv" id="mNodes">–</div><div class="ml">Nodes</div></div>
+        <div class="m"><div class="mv" id="mEdges">–</div><div class="ml">Causal Links</div></div>
+        <div class="m"><div class="mv" id="mCx">–</div><div class="ml">Complexity (E/N)</div></div>
+        <div class="m"><div class="mv" id="mMerge">–</div><div class="ml">Confluence</div></div>
+      </div>
+      <div id="controls">
+        <button class="btn" id="btnPulse">Pulse</button>
+        <button class="btn" id="btnReset">Recenter</button>
+        <div id="turnWrap">
+          <span style="color:var(--muted); font-size:12px;">Turn</span>
+          <input id="turn" type="range" min="0" max="0" value="0" />
+          <span id="turnVal" style="font-size:12px; color:var(--muted);">0</span>
+        </div>
+      </div>
+    </div>
+    <div id="links">
+      <a id="aJson" href="#">hypergraph.json</a>
+      <a id="aDot" href="#">hypergraph.dot</a>
+    </div>
+  </div>
+  <div id="tip"></div>
+  <div id="hint">Drag to pan · Wheel to zoom · Hover for details · Turn slider = hierarchy</div>
+  <script>
+    const GRAPH = {"id":"nomenclature","nodes":[{"id":"concept:agi-solver","kind":"concept","label":"AGI Solver","data":{"aliases":[],"definition":"Optimal Path Finding","sources":[{"kind":"capability_catalog","path":"dist/meta3-engine-v0.5.0/config/capabilities.json"}]}},{"id":"concept:amplify-signal","kind":"concept","label":"amplify_signal","data":{"aliases":[],"definition":"Standalone Utility: amplify_signal","sources":[{"kind":"capability_catalog","path":"dist/meta3-engine-v0.5.0/config/capabilities.json"}]}},{"id":"concept:antigravity-history-explorer","kind":"concept","label":"antigravity_history_explorer","data":{"aliases":[],"definition":"Standalone Utility: antigravity_history_explorer","sources":[{"kind":"capability_catalog","path":"dist/meta3-engine-v0.5.0/config/capabilities.json"}]}},{"id":"concept:binary","kind":"concept","label":"binary","data":{"aliases":[],"definition":"A capability classification used in the catalog.","sources":[{"kind":"capability_catalog","path":"dist/meta3-engine-v0.5.0/config/capabilities.json"}]}},{"id":"concept:capability-catalog","kind":"concept","label":"Capability Catalog","data":{"aliases":["catalog"],"definition":"A machine-readable list of what the system can do (capabilities), including triggers, types, and source modules.","sources":[{"kind":"curation","path":"(curation)"}]}},{"id":"concept:capability-graph","kind":"concept","label":"Capability Graph","data":{"aliases":["graph_capability_graph"],"definition":"A hypergraph derived from the capability catalog that links capabilities to triggers, types, and source modules (not a filesystem 'contains' graph).","sources":[{"kind":"curation","path":"(curation)"}]}},{"id":"concept:capability-report","kind":"concept","label":"capability_report","data":{"aliases":[],"definition":"generate English capability/module report (`meta3-graph-core/src/bin/capability_report.rs`)","sources":[{"kind":"graph_core_prompt","path":"meta3-graph-core/SYSTEM_PROMPT.md"}]}},{"id":"concept:capability-report-english","kind":"concept","label":"Capability Report (English)","data":{"aliases":["capability_report"],"definition":"A human-readable report explaining what each capability/module does, how to invoke it, and where it is implemented.","sources":[{"kind":"curation","path":"(curation)"}]}},{"id":"concept:flux","kind":"concept","label":"flux","data":{"aliases":[],"definition":"Standalone Utility: flux","sources":[{"kind":"capability_catalog","path":"dist/meta3-engine-v0.5.0/config/capabilities.json"}]}},{"id":"concept:graph-capability-graph","kind":"concept","label":"graph_capability_graph","data":{"aliases":[],"definition":"build **catalog-focused** capability hypergraph (`meta3-graph-core/src/bin/graph_capability_graph.rs`)","sources":[{"kind":"graph_core_prompt","path":"meta3-graph-core/SYSTEM_PROMPT.md"}]}},{"id":"concept:graph-context-bundle","kind":"concept","label":"graph_context_bundle","data":{"aliases":[],"definition":"create context + tasks from a hypergraph (`meta3-graph-core/src/bin/graph_context_bundle.rs`)","sources":[{"kind":"graph_core_prompt","path":"meta3-graph-core/SYSTEM_PROMPT.md"}]}},{"id":"concept:graph-harness-emit","kind":"concept","label":"graph_harness_emit","data":{"aliases":[],"definition":"append harness/loop nodes for auditability (`meta3-graph-core/src/bin/graph_harness_emit.rs`)","sources":[{"kind":"graph_core_prompt","path":"meta3-graph-core/SYSTEM_PROMPT.md"}]}},{"id":"concept:graph-probe","kind":"concept","label":"graph_probe","data":{"aliases":[],"definition":"summarize a hypergraph (`meta3-graph-core/src/bin/graph_probe.rs`)","sources":[{"kind":"graph_core_prompt","path":"meta3-graph-core/SYSTEM_PROMPT.md"}]}},{"id":"concept:graph-transducer-runtime","kind":"concept","label":"Graph Transducer Runtime","data":{"aliases":[],"definition":"A runtime that consumes events, evaluates state transitions as graph deltas, validates them against invariants, and applies them while emitting durable evidence (receipts).","sources":[{"kind":"curation","path":"(curation)"}]}},{"id":"concept:graphmutate","kind":"concept","label":"Graph.Mutate","data":{"aliases":[],"definition":"Propose graph update","sources":[{"kind":"system_prompt","path":"meta3-causal-kernel/SYSTEM_PROMPT.md"}]}},{"id":"concept:graphquery","kind":"concept","label":"Graph.Query","data":{"aliases":[],"definition":"Query the State Hypergraph","sources":[{"kind":"system_prompt","path":"meta3-causal-kernel/SYSTEM_PROMPT.md"}]}},{"id":"concept:hybrid-chat","kind":"concept","label":"Hybrid Chat","data":{"aliases":[],"definition":"LLM + Graph Tracking","sources":[{"kind":"capability_catalog","path":"dist/meta3-engine-v0.5.0/config/capabilities.json"}]}},{"id":"concept:hypergraph","kind":"concept","label":"HyperGraph","data":{"aliases":["State Hypergraph","hypergraph"],"definition":"Meta6 Abstract Machine","sources":[{"kind":"capability_catalog","path":"dist/meta3-engine-v0.5.0/config/capabilities.json"},{"kind":"curation","path":"(curation)"}]}},{"id":"concept:interaction-hypergraph","kind":"concept","label":"interaction_hypergraph","data":{"aliases":[],"definition":"Standalone Utility: interaction_hypergraph","sources":[{"kind":"capability_catalog","path":"dist/meta3-engine-v0.5.0/config/capabilities.json"},{"kind":"system_report","path":"meta3-graph-core/SYSTEM_REPORT.md"}]}},{"id":"concept:jit-verification","kind":"concept","label":"JIT Verification","data":{"aliases":["Just-In-Time verification","LeJIT"],"definition":"Just-in-time verification: validate proposed actions/deltas against invariants before execution, producing accept/reject decisions with evidence.","sources":[{"kind":"curation","path":"(curation)"}]}},{"id":"concept:kernel-interception","kind":"concept","label":"kernel_interception","data":{"aliases":[],"definition":"A capability classification used in the catalog.","sources":[{"kind":"capability_catalog","path":"dist/meta3-engine-v0.5.0/config/capabilities.json"}]}},{"id":"concept:learning-solver","kind":"concept","label":"LEARNING SOLVER","data":{"aliases":[],"definition":"Heuristic + Multiway Verification","sources":[{"kind":"capability_catalog","path":"dist/meta3-engine-v0.5.0/config/capabilities.json"}]}},{"id":"concept:lejit","kind":"concept","label":"LeJIT","data":{"aliases":["JIT Verification","Just-In-Time verification"],"definition":"Just-in-time verification layer that validates proposed actions/deltas against invariants before they are executed.","sources":[{"kind":"curation","path":"(curation)"}]}},{"id":"concept:merge-mission-hypergraph","kind":"concept","label":"merge_mission_hypergraph","data":{"aliases":[],"definition":"merge `mission_graph.json` into a hypergraph (`meta3-graph-core/src/bin/merge_mission_hypergraph.rs`)","sources":[{"kind":"graph_core_prompt","path":"meta3-graph-core/SYSTEM_PROMPT.md"}]}},{"id":"concept:meta3-graph-core","kind":"concept","label":"Meta3 Graph Core","data":{"aliases":[],"definition":"Deterministic Rust kernel that reads ops packets / graph deltas and reifies them into reality with auditable receipts.","sources":[{"kind":"curation","path":"(curation)"}]}},{"id":"concept:negentropy","kind":"concept","label":"negentropy","data":{"aliases":[],"definition":"Standalone Utility: negentropy","sources":[{"kind":"capability_catalog","path":"dist/meta3-engine-v0.5.0/config/capabilities.json"}]}},{"id":"concept:oracle","kind":"concept","label":"oracle","data":{"aliases":[],"definition":"Standalone Utility: oracle","sources":[{"kind":"capability_catalog","path":"dist/meta3-engine-v0.5.0/config/capabilities.json"}]}},{"id":"concept:receipts-beat-recollection","kind":"concept","label":"Receipts Beat Recollection","data":{"aliases":["immutable evidence","receipts"],"definition":"Operational rule: don’t rely on memory. Every claim and state change should be backed by an artifact (receipt, graph packet, report).","sources":[{"kind":"curation","path":"(curation)"}]}},{"id":"concept:render-hypergraph","kind":"concept","label":"render_hypergraph","data":{"aliases":[],"definition":"render a hypergraph to self-contained HTML (`meta3-graph-core/src/bin/render_hypergraph.rs`)","sources":[{"kind":"graph_core_prompt","path":"meta3-graph-core/SYSTEM_PROMPT.md"}]}},{"id":"concept:ruliad","kind":"concept","label":"Ruliad","data":{"aliases":[],"definition":"Formal Rewrite System - Wolfram Physics","sources":[{"kind":"capability_catalog","path":"dist/meta3-engine-v0.5.0/config/capabilities.json"}]}},{"id":"concept:state-hypergraph","kind":"concept","label":"State Hypergraph","data":{"aliases":[],"definition":"The state model of the system: nodes represent entities (files, concepts, artifacts, tasks) and hyperedges represent causal relationships that can connect multiple entities at once.","sources":[{"kind":"curation","path":"(curation)"}]}},{"id":"concept:task-graph","kind":"concept","label":"Task Graph","data":{"aliases":[],"definition":"LLM-based Task Decomposition","sources":[{"kind":"capability_catalog","path":"dist/meta3-engine-v0.5.0/config/capabilities.json"}]}},{"id":"concept:thought-tree","kind":"concept","label":"Thought Tree","data":{"aliases":[],"definition":"ASCII Hierarchical Render","sources":[{"kind":"capability_catalog","path":"dist/meta3-engine-v0.5.0/config/capabilities.json"}]}},{"id":"concept:toolhub","kind":"concept","label":"ToolHub","data":{"aliases":[],"definition":"The capability scanner/catalog generator (ToolHub) used to enumerate available capabilities and tools.","sources":[{"kind":"curation","path":"(curation)"}]}},{"id":"concept:tsp","kind":"concept","label":"TSP","data":{"aliases":[],"definition":"Traveling Salesman Problem - Ruliad Way","sources":[{"kind":"capability_catalog","path":"dist/meta3-engine-v0.5.0/config/capabilities.json"}]}},{"id":"concept:utir","kind":"concept","label":"UTIR","data":{"aliases":["artifact stream","receipts"],"definition":"Universal Tool Invocation Receipt: a structured evidence stream used to audit and reproduce actions (writes/execs) performed by the system.","sources":[{"kind":"curation","path":"(curation)"}]}},{"id":"source_kind:capability_catalog","kind":"source_kind","label":"capability_catalog"},{"id":"source_kind:curation","kind":"source_kind","label":"curation"},{"id":"source_kind:graph_core_prompt","kind":"source_kind","label":"graph_core_prompt"},{"id":"source_kind:system_prompt","kind":"source_kind","label":"system_prompt"},{"id":"source_kind:system_report","kind":"source_kind","label":"system_report"}],"hyperedges":[{"id":"edge:derived_from:0","kind":"derived_from","causes":["source_kind:capability_catalog"],"effects":["concept:agi-solver"],"data":{"path":"dist/meta3-engine-v0.5.0/config/capabilities.json"}},{"id":"edge:derived_from:1","kind":"derived_from","causes":["source_kind:capability_catalog"],"effects":["concept:amplify-signal"],"data":{"path":"dist/meta3-engine-v0.5.0/config/capabilities.json"}},{"id":"edge:derived_from:2","kind":"derived_from","causes":["source_kind:capability_catalog"],"effects":["concept:antigravity-history-explorer"],"data":{"path":"dist/meta3-engine-v0.5.0/config/capabilities.json"}},{"id":"edge:derived_from:3","kind":"derived_from","causes":["source_kind:capability_catalog"],"effects":["concept:binary"],"data":{"path":"dist/meta3-engine-v0.5.0/config/capabilities.json"}},{"id":"edge:derived_from:4","kind":"derived_from","causes":["source_kind:curation"],"effects":["concept:capability-catalog"],"data":{"path":"(curation)"}},{"id":"edge:derived_from:5","kind":"derived_from","causes":["source_kind:curation"],"effects":["concept:capability-graph"],"data":{"path":"(curation)"}},{"id":"edge:derived_from:6","kind":"derived_from","causes":["source_kind:graph_core_prompt"],"effects":["concept:capability-report"],"data":{"path":"meta3-graph-core/SYSTEM_PROMPT.md"}},{"id":"edge:derived_from:7","kind":"derived_from","causes":["source_kind:curation"],"effects":["concept:capability-report-english"],"data":{"path":"(curation)"}},{"id":"edge:derived_from:8","kind":"derived_from","causes":["source_kind:capability_catalog"],"effects":["concept:flux"],"data":{"path":"dist/meta3-engine-v0.5.0/config/capabilities.json"}},{"id":"edge:derived_from:9","kind":"derived_from","causes":["source_kind:graph_core_prompt"],"effects":["concept:graph-capability-graph"],"data":{"path":"meta3-graph-core/SYSTEM_PROMPT.md"}},{"id":"edge:derived_from:10","kind":"derived_from","causes":["source_kind:graph_core_prompt"],"effects":["concept:graph-context-bundle"],"data":{"path":"meta3-graph-core/SYSTEM_PROMPT.md"}},{"id":"edge:derived_from:11","kind":"derived_from","causes":["source_kind:graph_core_prompt"],"effects":["concept:graph-harness-emit"],"data":{"path":"meta3-graph-core/SYSTEM_PROMPT.md"}},{"id":"edge:derived_from:12","kind":"derived_from","causes":["source_kind:graph_core_prompt"],"effects":["concept:graph-probe"],"data":{"path":"meta3-graph-core/SYSTEM_PROMPT.md"}},{"id":"edge:derived_from:13","kind":"derived_from","causes":["source_kind:curation"],"effects":["concept:graph-transducer-runtime"],"data":{"path":"(curation)"}},{"id":"edge:derived_from:14","kind":"derived_from","causes":["source_kind:system_prompt"],"effects":["concept:graphmutate"],"data":{"path":"meta3-causal-kernel/SYSTEM_PROMPT.md"}},{"id":"edge:derived_from:15","kind":"derived_from","causes":["source_kind:system_prompt"],"effects":["concept:graphquery"],"data":{"path":"meta3-causal-kernel/SYSTEM_PROMPT.md"}},{"id":"edge:derived_from:16","kind":"derived_from","causes":["source_kind:capability_catalog"],"effects":["concept:hybrid-chat"],"data":{"path":"dist/meta3-engine-v0.5.0/config/capabilities.json"}},{"id":"edge:derived_from:17","kind":"derived_from","causes":["source_kind:capability_catalog"],"effects":["concept:hypergraph"],"data":{"path":"dist/meta3-engine-v0.5.0/config/capabilities.json"}},{"id":"edge:derived_from:18","kind":"derived_from","causes":["source_kind:curation"],"effects":["concept:hypergraph"],"data":{"path":"(curation)"}},{"id":"edge:derived_from:19","kind":"derived_from","causes":["source_kind:capability_catalog"],"effects":["concept:interaction-hypergraph"],"data":{"path":"dist/meta3-engine-v0.5.0/config/capabilities.json"}},{"id":"edge:derived_from:20","kind":"derived_from","causes":["source_kind:system_report"],"effects":["concept:interaction-hypergraph"],"data":{"path":"meta3-graph-core/SYSTEM_REPORT.md"}},{"id":"edge:derived_from:21","kind":"derived_from","causes":["source_kind:curation"],"effects":["concept:jit-verification"],"data":{"path":"(curation)"}},{"id":"edge:derived_from:22","kind":"derived_from","causes":["source_kind:capability_catalog"],"effects":["concept:kernel-interception"],"data":{"path":"dist/meta3-engine-v0.5.0/config/capabilities.json"}},{"id":"edge:derived_from:23","kind":"derived_from","causes":["source_kind:capability_catalog"],"effects":["concept:learning-solver"],"data":{"path":"dist/meta3-engine-v0.5.0/config/capabilities.json"}},{"id":"edge:derived_from:24","kind":"derived_from","causes":["source_kind:curation"],"effects":["concept:lejit"],"data":{"path":"(curation)"}},{"id":"edge:derived_from:25","kind":"derived_from","causes":["source_kind:graph_core_prompt"],"effects":["concept:merge-mission-hypergraph"],"data":{"path":"meta3-graph-core/SYSTEM_PROMPT.md"}},{"id":"edge:derived_from:26","kind":"derived_from","causes":["source_kind:curation"],"effects":["concept:meta3-graph-core"],"data":{"path":"(curation)"}},{"id":"edge:derived_from:27","kind":"derived_from","causes":["source_kind:capability_catalog"],"effects":["concept:negentropy"],"data":{"path":"dist/meta3-engine-v0.5.0/config/capabilities.json"}},{"id":"edge:derived_from:28","kind":"derived_from","causes":["source_kind:capability_catalog"],"effects":["concept:oracle"],"data":{"path":"dist/meta3-engine-v0.5.0/config/capabilities.json"}},{"id":"edge:derived_from:29","kind":"derived_from","causes":["source_kind:curation"],"effects":["concept:receipts-beat-recollection"],"data":{"path":"(curation)"}},{"id":"edge:derived_from:30","kind":"derived_from","causes":["source_kind:graph_core_prompt"],"effects":["concept:render-hypergraph"],"data":{"path":"meta3-graph-core/SYSTEM_PROMPT.md"}},{"id":"edge:derived_from:31","kind":"derived_from","causes":["source_kind:capability_catalog"],"effects":["concept:ruliad"],"data":{"path":"dist/meta3-engine-v0.5.0/config/capabilities.json"}},{"id":"edge:derived_from:32","kind":"derived_from","causes":["source_kind:curation"],"effects":["concept:state-hypergraph"],"data":{"path":"(curation)"}},{"id":"edge:derived_from:33","kind":"derived_from","causes":["source_kind:capability_catalog"],"effects":["concept:task-graph"],"data":{"path":"dist/meta3-engine-v0.5.0/config/capabilities.json"}},{"id":"edge:derived_from:34","kind":"derived_from","causes":["source_kind:capability_catalog"],"effects":["concept:thought-tree"],"data":{"path":"dist/meta3-engine-v0.5.0/config/capabilities.json"}},{"id":"edge:derived_from:35","kind":"derived_from","causes":["source_kind:curation"],"effects":["concept:toolhub"],"data":{"path":"(curation)"}},{"id":"edge:derived_from:36","kind":"derived_from","causes":["source_kind:capability_catalog"],"effects":["concept:tsp"],"data":{"path":"dist/meta3-engine-v0.5.0/config/capabilities.json"}},{"id":"edge:derived_from:37","kind":"derived_from","causes":["source_kind:curation"],"effects":["concept:utir"],"data":{"path":"(curation)"}}],"metadata":{"run_id":"nomenclature-20260119T190125Z","generated_at":"2026-01-19T19:01:25Z","source":"nomenclature_extractor"}};
+    const DOT = "digraph G {\n  rankdir=LR;\n  node [shape=box, style=filled, fontname=\"Helvetica\"];\n  \"concept:agi-solver\" [label=\"AGI Solver\", fillcolor=\"#A3B18A\"];\n  \"concept:amplify-signal\" [label=\"amplify_signal\", fillcolor=\"#A3B18A\"];\n  \"concept:antigravity-history-explorer\" [label=\"antigravity_history_explorer\", fillcolor=\"#A3B18A\"];\n  \"concept:binary\" [label=\"binary\", fillcolor=\"#A3B18A\"];\n  \"concept:capability-catalog\" [label=\"Capability Catalog\", fillcolor=\"#A3B18A\"];\n  \"concept:capability-graph\" [label=\"Capability Graph\", fillcolor=\"#A3B18A\"];\n  \"concept:capability-report\" [label=\"capability_report\", fillcolor=\"#A3B18A\"];\n  \"concept:capability-report-english\" [label=\"Capability Report (English)\", fillcolor=\"#A3B18A\"];\n  \"concept:flux\" [label=\"flux\", fillcolor=\"#A3B18A\"];\n  \"concept:graph-capability-graph\" [label=\"graph_capability_graph\", fillcolor=\"#A3B18A\"];\n  \"concept:graph-context-bundle\" [label=\"graph_context_bundle\", fillcolor=\"#A3B18A\"];\n  \"concept:graph-harness-emit\" [label=\"graph_harness_emit\", fillcolor=\"#A3B18A\"];\n  \"concept:graph-probe\" [label=\"graph_probe\", fillcolor=\"#A3B18A\"];\n  \"concept:graph-transducer-runtime\" [label=\"Graph Transducer Runtime\", fillcolor=\"#A3B18A\"];\n  \"concept:graphmutate\" [label=\"Graph.Mutate\", fillcolor=\"#A3B18A\"];\n  \"concept:graphquery\" [label=\"Graph.Query\", fillcolor=\"#A3B18A\"];\n  \"concept:hybrid-chat\" [label=\"Hybrid Chat\", fillcolor=\"#A3B18A\"];\n  \"concept:hypergraph\" [label=\"HyperGraph\", fillcolor=\"#A3B18A\"];\n  \"concept:interaction-hypergraph\" [label=\"interaction_hypergraph\", fillcolor=\"#A3B18A\"];\n  \"concept:jit-verification\" [label=\"JIT Verification\", fillcolor=\"#A3B18A\"];\n  \"concept:kernel-interception\" [label=\"kernel_interception\", fillcolor=\"#A3B18A\"];\n  \"concept:learning-solver\" [label=\"LEARNING SOLVER\", fillcolor=\"#A3B18A\"];\n  \"concept:lejit\" [label=\"LeJIT\", fillcolor=\"#A3B18A\"];\n  \"concept:merge-mission-hypergraph\" [label=\"merge_mission_hypergraph\", fillcolor=\"#A3B18A\"];\n  \"concept:meta3-graph-core\" [label=\"Meta3 Graph Core\", fillcolor=\"#A3B18A\"];\n  \"concept:negentropy\" [label=\"negentropy\", fillcolor=\"#A3B18A\"];\n  \"concept:oracle\" [label=\"oracle\", fillcolor=\"#A3B18A\"];\n  \"concept:receipts-beat-recollection\" [label=\"Receipts Beat Recollection\", fillcolor=\"#A3B18A\"];\n  \"concept:render-hypergraph\" [label=\"render_hypergraph\", fillcolor=\"#A3B18A\"];\n  \"concept:ruliad\" [label=\"Ruliad\", fillcolor=\"#A3B18A\"];\n  \"concept:state-hypergraph\" [label=\"State Hypergraph\", fillcolor=\"#A3B18A\"];\n  \"concept:task-graph\" [label=\"Task Graph\", fillcolor=\"#A3B18A\"];\n  \"concept:thought-tree\" [label=\"Thought Tree\", fillcolor=\"#A3B18A\"];\n  \"concept:toolhub\" [label=\"ToolHub\", fillcolor=\"#A3B18A\"];\n  \"concept:tsp\" [label=\"TSP\", fillcolor=\"#A3B18A\"];\n  \"concept:utir\" [label=\"UTIR\", fillcolor=\"#A3B18A\"];\n  \"source_kind:capability_catalog\" [label=\"capability_catalog\", fillcolor=\"#A3B18A\"];\n  \"source_kind:curation\" [label=\"curation\", fillcolor=\"#A3B18A\"];\n  \"source_kind:graph_core_prompt\" [label=\"graph_core_prompt\", fillcolor=\"#A3B18A\"];\n  \"source_kind:system_prompt\" [label=\"system_prompt\", fillcolor=\"#A3B18A\"];\n  \"source_kind:system_report\" [label=\"system_report\", fillcolor=\"#A3B18A\"];\n  \"source_kind:capability_catalog\" -> \"concept:agi-solver\" [label=\"derived_from\", style=solid];\n  \"source_kind:capability_catalog\" -> \"concept:amplify-signal\" [label=\"derived_from\", style=solid];\n  \"source_kind:capability_catalog\" -> \"concept:antigravity-history-explorer\" [label=\"derived_from\", style=solid];\n  \"source_kind:capability_catalog\" -> \"concept:binary\" [label=\"derived_from\", style=solid];\n  \"source_kind:curation\" -> \"concept:capability-catalog\" [label=\"derived_from\", style=solid];\n  \"source_kind:curation\" -> \"concept:capability-graph\" [label=\"derived_from\", style=solid];\n  \"source_kind:graph_core_prompt\" -> \"concept:capability-report\" [label=\"derived_from\", style=solid];\n  \"source_kind:curation\" -> \"concept:capability-report-english\" [label=\"derived_from\", style=solid];\n  \"source_kind:capability_catalog\" -> \"concept:flux\" [label=\"derived_from\", style=solid];\n  \"source_kind:graph_core_prompt\" -> \"concept:graph-capability-graph\" [label=\"derived_from\", style=solid];\n  \"source_kind:graph_core_prompt\" -> \"concept:graph-context-bundle\" [label=\"derived_from\", style=solid];\n  \"source_kind:graph_core_prompt\" -> \"concept:graph-harness-emit\" [label=\"derived_from\", style=solid];\n  \"source_kind:graph_core_prompt\" -> \"concept:graph-probe\" [label=\"derived_from\", style=solid];\n  \"source_kind:curation\" -> \"concept:graph-transducer-runtime\" [label=\"derived_from\", style=solid];\n  \"source_kind:system_prompt\" -> \"concept:graphmutate\" [label=\"derived_from\", style=solid];\n  \"source_kind:system_prompt\" -> \"concept:graphquery\" [label=\"derived_from\", style=solid];\n  \"source_kind:capability_catalog\" -> \"concept:hybrid-chat\" [label=\"derived_from\", style=solid];\n  \"source_kind:capability_catalog\" -> \"concept:hypergraph\" [label=\"derived_from\", style=solid];\n  \"source_kind:curation\" -> \"concept:hypergraph\" [label=\"derived_from\", style=solid];\n  \"source_kind:capability_catalog\" -> \"concept:interaction-hypergraph\" [label=\"derived_from\", style=solid];\n  \"source_kind:system_report\" -> \"concept:interaction-hypergraph\" [label=\"derived_from\", style=solid];\n  \"source_kind:curation\" -> \"concept:jit-verification\" [label=\"derived_from\", style=solid];\n  \"source_kind:capability_catalog\" -> \"concept:kernel-interception\" [label=\"derived_from\", style=solid];\n  \"source_kind:capability_catalog\" -> \"concept:learning-solver\" [label=\"derived_from\", style=solid];\n  \"source_kind:curation\" -> \"concept:lejit\" [label=\"derived_from\", style=solid];\n  \"source_kind:graph_core_prompt\" -> \"concept:merge-mission-hypergraph\" [label=\"derived_from\", style=solid];\n  \"source_kind:curation\" -> \"concept:meta3-graph-core\" [label=\"derived_from\", style=solid];\n  \"source_kind:capability_catalog\" -> \"concept:negentropy\" [label=\"derived_from\", style=solid];\n  \"source_kind:capability_catalog\" -> \"concept:oracle\" [label=\"derived_from\", style=solid];\n  \"source_kind:curation\" -> \"concept:receipts-beat-recollection\" [label=\"derived_from\", style=solid];\n  \"source_kind:graph_core_prompt\" -> \"concept:render-hypergraph\" [label=\"derived_from\", style=solid];\n  \"source_kind:capability_catalog\" -> \"concept:ruliad\" [label=\"derived_from\", style=solid];\n  \"source_kind:curation\" -> \"concept:state-hypergraph\" [label=\"derived_from\", style=solid];\n  \"source_kind:capability_catalog\" -> \"concept:task-graph\" [label=\"derived_from\", style=solid];\n  \"source_kind:capability_catalog\" -> \"concept:thought-tree\" [label=\"derived_from\", style=solid];\n  \"source_kind:curation\" -> \"concept:toolhub\" [label=\"derived_from\", style=solid];\n  \"source_kind:capability_catalog\" -> \"concept:tsp\" [label=\"derived_from\", style=solid];\n  \"source_kind:curation\" -> \"concept:utir\" [label=\"derived_from\", style=solid];\n}\n";
+    const COLORS = {{
+      run: "#ff8fab",
+      goal: "#41d6b2",
+      turn: "#7aa7ff",
+      thought: "#ffd166",
+      tool_call: "#b8c0ff",
+      tool_result: "#e9efff",
+      artifact_path: "#ffb703",
+      other: "#a3b18a"
+    }};
+    const BASE_MASS = {{
+      run: 120, goal: 100, turn: 70, thought: 60,
+      tool_call: 55, tool_result: 45, artifact_path: 80, other: 40
+    }};
+    function clamp(v,a,b){{return Math.max(a,Math.min(b,v));}}
+    function nodeTurn(n){{
+      const d = n.data || {{}};
+      if (typeof d.turn === "number") return d.turn;
+      if (typeof d.index === "number") return d.index;
+      return 0;
+    }}
+    function nodeMass(n, deg){{
+      const kind = n.kind || "other";
+      let m = BASE_MASS[kind] || BASE_MASS.other;
+      const d = n.data || {{}};
+      const text = (d.full_text || d.text || "");
+      const textBoost = Math.log1p(String(text).length / 120) * 35;
+      const degreeBoost = Math.log1p(deg) * 18;
+      return m + textBoost + degreeBoost;
+    }}
+    function edgeWeight(e){{
+      let w = 1;
+      if (e.kind === "tool_effect") w += 0.8;
+      if (e.kind === "invocation") w += 0.5;
+      if (e.kind === "turn_exec") w += 0.3;
+      const allowed = e.data && e.data.allowed;
+      if (allowed === false) w += 1.4;
+      w += clamp((e.effects?.length || 0) * 0.15, 0, 1.2);
+      return w;
+    }}
+    function fmt2(x){{
+      if (!isFinite(x)) return "–";
+      return (Math.round(x*100)/100).toFixed(2);
+    }}
+    function build(graph){{
+      const nodes = graph.nodes || [];
+      const hyperedges = graph.hyperedges || [];
+      const byId = new Map(nodes.map(n => [n.id, n]));
+      const indeg = new Map();
+      const outdeg = new Map();
+      const edges = [];
+      for (const he of hyperedges) {{
+        const w = edgeWeight(he);
+        for (const c of (he.causes || [])) {{
+          for (const t of (he.effects || [])) {{
+            if (!byId.has(c) || !byId.has(t)) continue;
+            edges.push({{ s: c, t, kind: he.kind || "edge", w, he }});
+            indeg.set(t, (indeg.get(t)||0)+1);
+            outdeg.set(c, (outdeg.get(c)||0)+1);
+          }}
+        }}
+      }}
+      const degree = new Map();
+      for (const n of nodes) degree.set(n.id, (indeg.get(n.id)||0)+(outdeg.get(n.id)||0));
+      let mergeN = 0;
+      for (const n of nodes) if ((indeg.get(n.id)||0) >= 2) mergeN++;
+      let maxTurn = 0;
+      for (const n of nodes) maxTurn = Math.max(maxTurn, nodeTurn(n));
+      const simNodes = nodes.map((n,i) => {{
+        const d = degree.get(n.id) || 0;
+        const m = nodeMass(n,d);
+        const r = clamp(2.5 + Math.sqrt(m) * 0.35, 3, 22);
+        const t = nodeTurn(n);
+        const ang = i*0.37 + t*0.8;
+        const rad = 40 + t*70 + (i % 7) * 18;
+        return {{ id: n.id, n, turn: t, mass: m, r, x: Math.cos(ang)*rad, y: Math.sin(ang)*rad, vx:0, vy:0 }};
+      }});
+      const simIndex = new Map(simNodes.map(sn => [sn.id, sn]));
+      const simEdges = edges.map(e => ({{ a: simIndex.get(e.s), b: simIndex.get(e.t), kind: e.kind, w: e.w, he: e.he }})).filter(e => e.a && e.b);
+      return {{ graph, nodes, hyperedges, edges, simNodes, simEdges, indeg, outdeg, mergeN, maxTurn }};
+    }}
+    function renderer(state){{
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+      const tip = document.getElementById("tip");
+      let width=0, height=0, dpr=1;
+      function resize(){{
+        dpr = window.devicePixelRatio || 1;
+        width = window.innerWidth; height = window.innerHeight;
+        canvas.style.width = width+"px"; canvas.style.height = height+"px"; canvas.style.display="block";
+        canvas.width = Math.floor(width*dpr); canvas.height = Math.floor(height*dpr);
+        ctx.setTransform(dpr,0,0,dpr,0,0);
+      }}
+      resize(); window.addEventListener("resize", resize);
+      const cam = {{ x: width/2, y: height/2, s: 1.0 }};
+      const pan = {{ down:false, x:0, y:0, cx:0, cy:0 }};
+      canvas.addEventListener("mousedown", (e)=>{{ pan.down=true; pan.x=e.clientX; pan.y=e.clientY; pan.cx=cam.x; pan.cy=cam.y; }});
+      window.addEventListener("mouseup", ()=>{{ pan.down=false; }});
+      window.addEventListener("mousemove", (e)=>{{ if(pan.down){{ cam.x=pan.cx+(e.clientX-pan.x); cam.y=pan.cy+(e.clientY-pan.y); }} }});
+      canvas.addEventListener("wheel",(e)=>{{
+        e.preventDefault();
+        const k = Math.exp(-e.deltaY*0.0012);
+        const s2 = clamp(cam.s*k, 0.18, 3.5);
+        const mx=e.clientX,my=e.clientY;
+        const wx=(mx-cam.x)/cam.s, wy=(my-cam.y)/cam.s;
+        cam.x = mx - wx*s2; cam.y = my - wy*s2; cam.s = s2;
+      }}, {{ passive:false }});
+      const ui = {{ maxTurn: state.maxTurn, turn: state.maxTurn, pulse: true }};
+      const turnEl = document.getElementById("turn");
+      const turnVal = document.getElementById("turnVal");
+      turnEl.max = String(state.maxTurn);
+      turnEl.value = String(state.maxTurn);
+      turnVal.textContent = String(state.maxTurn);
+      turnEl.addEventListener("input",()=>{{ ui.turn = Number(turnEl.value || "0"); turnVal.textContent = String(ui.turn); }});
+      document.getElementById("btnPulse").addEventListener("click",()=>{{ ui.pulse=!ui.pulse; }});
+      document.getElementById("btnReset").addEventListener("click",()=>{{ cam.x=width/2; cam.y=height/2; cam.s=1.0; }});
+      function visible(sn){{ if (sn.n.kind==="run"||sn.n.kind==="goal") return true; return sn.turn<=ui.turn; }}
+      function screen(sn){{ return {{ sx: cam.x + sn.x*cam.s, sy: cam.y + sn.y*cam.s }}; }}
+      let hover=null;
+      window.addEventListener("mousemove",(e)=>{{
+        const mx=e.clientX,my=e.clientY;
+        const wx=(mx-cam.x)/cam.s, wy=(my-cam.y)/cam.s;
+        let best=null,bestD=1e9;
+        for(const sn of state.simNodes){{
+          if(!visible(sn)) continue;
+          const dx=sn.x-wx, dy=sn.y-wy;
+          const d2=dx*dx+dy*dy;
+          const rr=(sn.r+6)**2;
+          if(d2<rr && d2<bestD){{ bestD=d2; best=sn; }}
+        }}
+        hover=best;
+        if(!hover){{ tip.style.transform="translate(-9999px,-9999px)"; return; }}
+        const n=hover.n, d=n.data||{{}};
+        const text=d.full_text||d.text||"";
+        const label=n.label||n.kind||"node";
+        const meta=[`kind: ${{n.kind}}`, `turn: ${{hover.turn}}`].join(" · ");
+        tip.innerHTML = `<div style="font-weight:800;">${{label.replace(/</g,"&lt;")}}</div>` +
+                        `<div class="k">${{meta.replace(/</g,"&lt;")}}</div>` +
+                        (text ? `<div style="margin-top:8px;">${{String(text).slice(0,420).replace(/</g,"&lt;")}}${{String(text).length>420?"…":""}}</div>` : "");
+        tip.style.transform = `translate(${{Math.min(mx+14, width-440)}}px, ${{Math.min(my+14, height-240)}}px)`;
+      }});
+      function stepPhysics(dt){{
+        const nodes=state.simNodes, edges=state.simEdges;
+        const cell=110; const grid=new Map(); const key=(ix,iy)=>ix+","+iy;
+        for(const n of nodes){{ if(!visible(n)) continue; const ix=Math.floor(n.x/cell), iy=Math.floor(n.y/cell); const k=key(ix,iy); if(!grid.has(k)) grid.set(k,[]); grid.get(k).push(n); }}
+        const repK=2200;
+        for(const n of nodes){{
+          if(!visible(n)) continue;
+          const ix=Math.floor(n.x/cell), iy=Math.floor(n.y/cell);
+          for(let dx=-1; dx<=1; dx++) for(let dy=-1; dy<=1; dy++) {{
+            const bucket=grid.get(key(ix+dx,iy+dy)); if(!bucket) continue;
+            for(const m of bucket){{ if(m===n) continue; const vx=n.x-m.x, vy=n.y-m.y; const d2=vx*vx+vy*vy+0.01; const min=(n.r+m.r)*1.2; const min2=min*min; const f=(d2<min2)?(repK/d2)*1.6:(repK/d2); n.vx += (vx/Math.sqrt(d2))*f*dt; n.vy += (vy/Math.sqrt(d2))*f*dt; }}
+          }}
+        }}
+        const spring=0.018;
+        for(const e of edges){{
+          if(!visible(e.a)||!visible(e.b)) continue;
+          const dx=e.b.x-e.a.x, dy=e.b.y-e.a.y;
+          const dist=Math.sqrt(dx*dx+dy*dy)+0.01;
+          const desired=80+(e.a.r+e.b.r)*1.2;
+          const f=(dist-desired)*spring*(0.6+e.w);
+          const fx=(dx/dist)*f, fy=(dy/dist)*f;
+          e.a.vx += fx*dt; e.a.vy += fy*dt; e.b.vx -= fx*dt; e.b.vy -= fy*dt;
+        }}
+        for(const n of nodes){{
+          if(!visible(n)) continue;
+          const t=n.turn;
+          const targetR=40+t*75;
+          const ang=(Math.atan2(n.y,n.x)+Math.PI*2)%(Math.PI*2);
+          const tx=Math.cos(ang)*targetR, ty=Math.sin(ang)*targetR;
+          n.vx += (tx-n.x)*0.0025*dt;
+          n.vy += (ty-n.y)*0.0025*dt;
+        }}
+        for(const n of nodes){{
+          if(!visible(n)) continue;
+          const damp=0.86 - clamp((n.mass/500)*0.18,0,0.22);
+          n.vx *= damp; n.vy *= damp; n.x += n.vx*dt; n.y += n.vy*dt;
+        }}
+      }}
+      let pulseT=0;
+      function draw(dt){{
+        ctx.clearRect(0,0,width,height);
+        ctx.globalAlpha=0.15; ctx.fillStyle="#ffffff";
+        for(let i=0;i<120;i++){{ const x=(i*9973)%width; const y=(i*5419)%height; ctx.fillRect(x,y,1,1); }}
+        ctx.globalAlpha=1;
+        ctx.lineWidth=1;
+        for(const e of state.simEdges){{
+          if(!visible(e.a)||!visible(e.b)) continue;
+          const A=screen(e.a), B=screen(e.b);
+          const col=(e.kind==="tool_effect")?"rgba(122,167,255,0.26)":
+                    (e.kind==="flow")?"rgba(255,209,102,0.22)":
+                    (e.kind==="invocation")?"rgba(255,93,143,0.22)":
+                    "rgba(233,239,255,0.14)";
+          ctx.strokeStyle=col;
+          ctx.lineWidth=clamp(0.6+e.w*0.55,0.7,2.6);
+          ctx.beginPath(); ctx.moveTo(A.sx,A.sy);
+          const mx=(A.sx+B.sx)/2, my=(A.sy+B.sy)/2;
+          const nx=(B.sy-A.sy)*0.06, ny=(A.sx-B.sx)*0.06;
+          ctx.quadraticCurveTo(mx+nx,my+ny,B.sx,B.sy);
+          ctx.stroke();
+        }}
+        if(ui.pulse){{
+          pulseT += dt*0.0015;
+          for(let i=0; i<state.simEdges.length; i+=6){{
+            const e=state.simEdges[i];
+            if(!visible(e.a)||!visible(e.b)) continue;
+            const A=screen(e.a), B=screen(e.b);
+            const t=(pulseT+i*0.017)%1;
+            const x=A.sx+(B.sx-A.sx)*t, y=A.sy+(B.sy-A.sy)*t;
+            ctx.fillStyle="rgba(255,93,143,0.55)";
+            ctx.beginPath(); ctx.arc(x,y,1.1+e.w*0.7,0,Math.PI*2); ctx.fill();
+          }}
+        }}
+        for(const sn of state.simNodes){{
+          if(!visible(sn)) continue;
+          const {{sx,sy}}=screen(sn);
+          const kind=sn.n.kind||"other";
+          const col=COLORS[kind]||COLORS.other;
+          const glow=clamp(sn.mass/260,0.2,1.2);
+          ctx.globalAlpha=0.22; ctx.fillStyle=col;
+          ctx.beginPath(); ctx.arc(sx,sy,sn.r*(1.8+glow),0,Math.PI*2); ctx.fill();
+          ctx.globalAlpha=1;
+          ctx.fillStyle=col;
+          ctx.beginPath(); ctx.arc(sx,sy,sn.r,0,Math.PI*2); ctx.fill();
+          if(hover && hover.id===sn.id){{
+            ctx.strokeStyle="rgba(255,255,255,0.9)";
+            ctx.lineWidth=2; ctx.beginPath(); ctx.arc(sx,sy,sn.r+5,0,Math.PI*2); ctx.stroke();
+          }}
+        }}
+      }}
+      let last=performance.now();
+      function frame(now){{
+        const dt=now-last; last=now;
+        for(let i=0;i<2;i++) stepPhysics(dt*0.55);
+        draw(dt);
+        requestAnimationFrame(frame);
+      }}
+      requestAnimationFrame(frame);
+      return {{ cam, ui }};
+    }}
+    function download(name, text) {{
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(new Blob([text], {{type:"application/octet-stream"}}));
+      a.download = name;
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(a.href), 2500);
+    }}
+    function main(){{
+      const state = build(GRAPH);
+      document.getElementById("mNodes").textContent = String(state.nodes.length);
+      document.getElementById("mEdges").textContent = String(state.edges.length);
+      document.getElementById("mCx").textContent = fmt2(state.edges.length / Math.max(1, state.nodes.length));
+      document.getElementById("mMerge").textContent = fmt2(state.mergeN / Math.max(1, state.nodes.length));
+      document.getElementById("aJson").onclick = (e)=>{{ e.preventDefault(); download("hypergraph.json", JSON.stringify(GRAPH, null, 2)); }};
+      document.getElementById("aDot").onclick = (e)=>{{ e.preventDefault(); download("hypergraph.dot", DOT); }};
+      renderer(state);
+    }}
+    main();
+  </script>
+</body>
+</html>
