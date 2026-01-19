@@ -24,11 +24,13 @@ fi
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 OUT_NOM="$ROOT/showcases/nomenclature"
 OUT_CAP="$ROOT/showcases/capability-graph"
+OUT_MIS="$ROOT/showcases/mission-bridge"
 DOCS_NOM="$ROOT/docs/nomenclature"
 DOCS_CAP="$ROOT/docs/capability-graph"
+DOCS_MIS="$ROOT/docs/mission-bridge"
 TMP="$ROOT/tmp/_showcase_tmp"
 
-mkdir -p "$OUT_NOM" "$OUT_CAP" "$DOCS_NOM" "$DOCS_CAP" "$TMP"
+mkdir -p "$OUT_NOM" "$OUT_CAP" "$OUT_MIS" "$DOCS_NOM" "$DOCS_CAP" "$DOCS_MIS" "$TMP"
 
 echo "[1/3] Extract curated nomenclature"
 python3 "$ROOT/tools/extract_nomenclature.py" --engine-repo "$ENGINE_REPO" --out-dir "$ROOT" >/dev/null
@@ -55,7 +57,28 @@ cargo run --quiet --manifest-path "$ENGINE_REPO/meta3-graph-core/Cargo.toml" \
 cp -f "$TMP/capability.hypergraph.json" "$OUT_CAP/hypergraph.json"
 cp -f "$TMP/capability_report.md" "$OUT_CAP/capability_report.md"
 
-echo "[3/3] Render viewers (engine)"
+echo "[3/4] Mission → Code bridge (measured)"
+cp -f "$ENGINE_REPO/tests/graph_core/fixtures/hyper_small.json" "$OUT_MIS/hypergraph.json"
+cp -f "$ENGINE_REPO/tests/graph_core/fixtures/mission_small.json" "$OUT_MIS/mission_graph.json"
+
+CARGO_TARGET_DIR="$ENGINE_REPO/target" \
+cargo run --quiet --manifest-path "$ENGINE_REPO/meta3-graph-core/Cargo.toml" \
+  --bin merge_mission_hypergraph -- \
+  --hyper "$OUT_MIS/hypergraph.json" \
+  --mission "$OUT_MIS/mission_graph.json" \
+  --out "$OUT_MIS/merged.hypergraph.json" \
+  --scope full
+
+python3 "$ENGINE_REPO/scripts/graph_core_eval.py" \
+  --hyper "$OUT_MIS/hypergraph.json" \
+  --mission "$OUT_MIS/mission_graph.json" \
+  --merged "$OUT_MIS/merged.hypergraph.json" \
+  --scope full \
+  --min-precision 1.0 \
+  --min-recall 1.0 \
+  --out "$OUT_MIS/eval.json"
+
+echo "[4/4] Render viewers (engine)"
 CARGO_TARGET_DIR="$ENGINE_REPO/target" \
 cargo run --quiet --manifest-path "$ENGINE_REPO/meta3-graph-core/Cargo.toml" \
   --bin render_hypergraph -- \
@@ -73,5 +96,14 @@ cargo run --quiet --manifest-path "$ENGINE_REPO/meta3-graph-core/Cargo.toml" \
 cp -f "$TMP/capability_view/index.html" "$OUT_CAP/index.html"
 cp -f "$TMP/capability_view/hypergraph.dot" "$OUT_CAP/hypergraph.dot"
 cp -f "$TMP/capability_view/index.html" "$DOCS_CAP/index.html"
+
+CARGO_TARGET_DIR="$ENGINE_REPO/target" \
+cargo run --quiet --manifest-path "$ENGINE_REPO/meta3-graph-core/Cargo.toml" \
+  --bin render_hypergraph -- \
+  --in "$OUT_MIS/merged.hypergraph.json" --out "$TMP/mission_view"
+
+cp -f "$TMP/mission_view/index.html" "$OUT_MIS/index.html"
+cp -f "$TMP/mission_view/hypergraph.dot" "$OUT_MIS/hypergraph.dot"
+cp -f "$TMP/mission_view/index.html" "$DOCS_MIS/index.html"
 
 echo "showcases_ok=1"

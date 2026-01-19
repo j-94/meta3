@@ -1,6 +1,6 @@
 # Capability & Module Report
 
-Generated: `2026-01-19T19:01:25Z`
+Generated: `2026-01-19T19:17:26Z`
 
 Catalog: `/Users/jobs/Desktop/tmp-meta3-engine-test/dist/meta3-engine-v0.5.0/config/capabilities.json`
 

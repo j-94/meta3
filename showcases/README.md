@@ -19,3 +19,10 @@ These are “muscle flex” demos: they produce **real artifacts** (English + gr
   - `showcases/capability-graph/index.html` (self-contained viewer)
   - `showcases/capability-graph/capability_report.md`
 
+## 3) Mission → Code Bridge (Measured)
+
+- Purpose: merge a mission graph into a hypergraph and **measure** bridge correctness (precision/recall).
+- Artifacts:
+  - `showcases/mission-bridge/merged.hypergraph.json`
+  - `showcases/mission-bridge/eval.json`
+  - `showcases/mission-bridge/index.html` (self-contained viewer)

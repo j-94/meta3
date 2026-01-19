@@ -1,40 +1,37 @@
 # Meta3 Nomenclature & Concepts
 
-Generated: `2026-01-19T19:01:25Z`
-Run: `nomenclature-20260119T190125Z`
+Generated: `2026-01-19T19:17:26Z`
+Run: `nomenclature-20260119T191726Z`
 Engine repo: `/Users/jobs/Desktop/tmp-meta3-engine-test`
 
 This glossary is generated from engine repo data (capability catalogs + system docs).
 
-## AGI Solver
+## Concepts
+
+Core concepts and capabilities (curated + derived).
+
+### AGI Solver
 
 Optimal Path Finding
 
 - Sources:
   - `dist/meta3-engine-v0.5.0/config/capabilities.json` (capability_catalog)
 
-## amplify_signal
+### amplify_signal
 
 Standalone Utility: amplify_signal
 
 - Sources:
   - `dist/meta3-engine-v0.5.0/config/capabilities.json` (capability_catalog)
 
-## antigravity_history_explorer
+### antigravity_history_explorer
 
 Standalone Utility: antigravity_history_explorer
 
 - Sources:
   - `dist/meta3-engine-v0.5.0/config/capabilities.json` (capability_catalog)
 
-## binary
-
-A capability classification used in the catalog.
-
-- Sources:
-  - `dist/meta3-engine-v0.5.0/config/capabilities.json` (capability_catalog)
-
-## Capability Catalog
+### Capability Catalog
 
 A machine-readable list of what the system can do (capabilities), including triggers, types, and source modules.
 
@@ -42,7 +39,7 @@ A machine-readable list of what the system can do (capabilities), including trig
 - Sources:
   - `(curation)` (curation)
 
-## Capability Graph
+### Capability Graph
 
 A hypergraph derived from the capability catalog that links capabilities to triggers, types, and source modules (not a filesystem 'contains' graph).
 
@@ -50,14 +47,14 @@ A hypergraph derived from the capability catalog that links capabilities to trig
 - Sources:
   - `(curation)` (curation)
 
-## capability_report
+### capability_report
 
 generate English capability/module report (`meta3-graph-core/src/bin/capability_report.rs`)
 
 - Sources:
   - `meta3-graph-core/SYSTEM_PROMPT.md` (graph_core_prompt)
 
-## Capability Report (English)
+### Capability Report (English)
 
 A human-readable report explaining what each capability/module does, how to invoke it, and where it is implemented.
 
@@ -65,70 +62,70 @@ A human-readable report explaining what each capability/module does, how to invo
 - Sources:
   - `(curation)` (curation)
 
-## flux
+### flux
 
 Standalone Utility: flux
 
 - Sources:
   - `dist/meta3-engine-v0.5.0/config/capabilities.json` (capability_catalog)
 
-## graph_capability_graph
+### graph_capability_graph
 
 build **catalog-focused** capability hypergraph (`meta3-graph-core/src/bin/graph_capability_graph.rs`)
 
 - Sources:
   - `meta3-graph-core/SYSTEM_PROMPT.md` (graph_core_prompt)
 
-## graph_context_bundle
+### graph_context_bundle
 
 create context + tasks from a hypergraph (`meta3-graph-core/src/bin/graph_context_bundle.rs`)
 
 - Sources:
   - `meta3-graph-core/SYSTEM_PROMPT.md` (graph_core_prompt)
 
-## graph_harness_emit
+### graph_harness_emit
 
 append harness/loop nodes for auditability (`meta3-graph-core/src/bin/graph_harness_emit.rs`)
 
 - Sources:
   - `meta3-graph-core/SYSTEM_PROMPT.md` (graph_core_prompt)
 
-## graph_probe
+### graph_probe
 
 summarize a hypergraph (`meta3-graph-core/src/bin/graph_probe.rs`)
 
 - Sources:
   - `meta3-graph-core/SYSTEM_PROMPT.md` (graph_core_prompt)
 
-## Graph Transducer Runtime
+### Graph Transducer Runtime
 
 A runtime that consumes events, evaluates state transitions as graph deltas, validates them against invariants, and applies them while emitting durable evidence (receipts).
 
 - Sources:
   - `(curation)` (curation)
 
-## Graph.Mutate
+### Graph.Mutate
 
 Propose graph update
 
 - Sources:
   - `meta3-causal-kernel/SYSTEM_PROMPT.md` (system_prompt)
 
-## Graph.Query
+### Graph.Query
 
 Query the State Hypergraph
 
 - Sources:
   - `meta3-causal-kernel/SYSTEM_PROMPT.md` (system_prompt)
 
-## Hybrid Chat
+### Hybrid Chat
 
 LLM + Graph Tracking
 
 - Sources:
   - `dist/meta3-engine-v0.5.0/config/capabilities.json` (capability_catalog)
 
-## HyperGraph
+### HyperGraph
 
 Meta6 Abstract Machine
 
@@ -137,7 +134,7 @@ Meta6 Abstract Machine
   - `dist/meta3-engine-v0.5.0/config/capabilities.json` (capability_catalog)
   - `(curation)` (curation)
 
-## interaction_hypergraph
+### interaction_hypergraph
 
 Standalone Utility: interaction_hypergraph
 
@@ -145,7 +142,7 @@ Standalone Utility: interaction_hypergraph
   - `dist/meta3-engine-v0.5.0/config/capabilities.json` (capability_catalog)
   - `meta3-graph-core/SYSTEM_REPORT.md` (system_report)
 
-## JIT Verification
+### JIT Verification
 
 Just-in-time verification: validate proposed actions/deltas against invariants before execution, producing accept/reject decisions with evidence.
 
@@ -153,21 +150,14 @@ Just-in-time verification: validate proposed actions/deltas against invariants b
 - Sources:
   - `(curation)` (curation)
 
-## kernel_interception
-
-A capability classification used in the catalog.
-
-- Sources:
-  - `dist/meta3-engine-v0.5.0/config/capabilities.json` (capability_catalog)
-
-## LEARNING SOLVER
+### LEARNING SOLVER
 
 Heuristic + Multiway Verification
 
 - Sources:
   - `dist/meta3-engine-v0.5.0/config/capabilities.json` (capability_catalog)
 
-## LeJIT
+### LeJIT
 
 Just-in-time verification layer that validates proposed actions/deltas against invariants before they are executed.
 
@@ -175,35 +165,35 @@ Just-in-time verification layer that validates proposed actions/deltas against i
 - Sources:
   - `(curation)` (curation)
 
-## merge_mission_hypergraph
+### merge_mission_hypergraph
 
 merge `mission_graph.json` into a hypergraph (`meta3-graph-core/src/bin/merge_mission_hypergraph.rs`)
 
 - Sources:
   - `meta3-graph-core/SYSTEM_PROMPT.md` (graph_core_prompt)
 
-## Meta3 Graph Core
+### Meta3 Graph Core
 
 Deterministic Rust kernel that reads ops packets / graph deltas and reifies them into reality with auditable receipts.
 
 - Sources:
   - `(curation)` (curation)
 
-## negentropy
+### negentropy
 
 Standalone Utility: negentropy
 
 - Sources:
   - `dist/meta3-engine-v0.5.0/config/capabilities.json` (capability_catalog)
 
-## oracle
+### oracle
 
 Standalone Utility: oracle
 
 - Sources:
   - `dist/meta3-engine-v0.5.0/config/capabilities.json` (capability_catalog)
 
-## Receipts Beat Recollection
+### Receipts Beat Recollection
 
 Operational rule: don’t rely on memory. Every claim and state change should be backed by an artifact (receipt, graph packet, report).
 
@@ -211,59 +201,77 @@ Operational rule: don’t rely on memory. Every claim and state change should be
 - Sources:
   - `(curation)` (curation)
 
-## render_hypergraph
+### render_hypergraph
 
 render a hypergraph to self-contained HTML (`meta3-graph-core/src/bin/render_hypergraph.rs`)
 
 - Sources:
   - `meta3-graph-core/SYSTEM_PROMPT.md` (graph_core_prompt)
 
-## Ruliad
+### Ruliad
 
 Formal Rewrite System - Wolfram Physics
 
 - Sources:
   - `dist/meta3-engine-v0.5.0/config/capabilities.json` (capability_catalog)
 
-## State Hypergraph
+### State Hypergraph
 
 The state model of the system: nodes represent entities (files, concepts, artifacts, tasks) and hyperedges represent causal relationships that can connect multiple entities at once.
 
 - Sources:
   - `(curation)` (curation)
 
-## Task Graph
+### Task Graph
 
 LLM-based Task Decomposition
 
 - Sources:
   - `dist/meta3-engine-v0.5.0/config/capabilities.json` (capability_catalog)
 
-## Thought Tree
+### Thought Tree
 
 ASCII Hierarchical Render
 
 - Sources:
   - `dist/meta3-engine-v0.5.0/config/capabilities.json` (capability_catalog)
 
-## ToolHub
+### ToolHub
 
 The capability scanner/catalog generator (ToolHub) used to enumerate available capabilities and tools.
 
 - Sources:
   - `(curation)` (curation)
 
-## TSP
+### TSP
 
 Traveling Salesman Problem - Ruliad Way
 
 - Sources:
   - `dist/meta3-engine-v0.5.0/config/capabilities.json` (capability_catalog)
 
-## UTIR
+### UTIR
 
 Universal Tool Invocation Receipt: a structured evidence stream used to audit and reproduce actions (writes/execs) performed by the system.
 
 - Aliases: `artifact stream`, `receipts`
 - Sources:
   - `(curation)` (curation)
+
+## Taxonomy
+
+System vocabulary that is primarily categorical/typing information (kept separate from concepts).
+
+### binary
+
+A capability classification used in the catalog.
+
+- Sources:
+  - `dist/meta3-engine-v0.5.0/config/capabilities.json` (capability_catalog)
+
+### kernel_interception
+
+A capability classification used in the catalog.
+
+- Sources:
+  - `dist/meta3-engine-v0.5.0/config/capabilities.json` (capability_catalog)

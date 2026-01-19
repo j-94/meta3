@@ -1,0 +1,15 @@
+{
+  "nodes": [
+    {"id": "FILE:/Users/jobs/Desktop/repo1/src/a.txt", "label": "a.txt"},
+    {"id": "FILE:/Users/jobs/Desktop/repo1/src/b.txt", "label": "b.txt"},
+    {"id": "FILE:/Users/jobs/Desktop/repo2/lib/c.txt", "label": "c.txt"},
+    {"id": "DIR:/Users/jobs/Desktop/repo1", "label": "repo1"}
+  ],
+  "links": [
+    {
+      "source": "DIR:/Users/jobs/Desktop/repo1",
+      "target": "FILE:/Users/jobs/Desktop/repo1/src/a.txt",
+      "type": "contains"
+    }
+  ]
+}

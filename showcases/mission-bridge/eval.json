@@ -1,0 +1,14 @@
+{
+  "hyper_file_count": 3,
+  "mission_file_count": 3,
+  "mission_included_count": 4,
+  "repo_count": 2,
+  "expected_bridges": 3,
+  "actual_bridges": 3,
+  "correct_bridges": 3,
+  "precision": 1.0,
+  "recall": 1.0,
+  "missing_sample": [],
+  "extra_sample": [],
+  "seconds": 0.0
+}

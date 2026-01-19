@@ -1,0 +1,123 @@
+{
+  "id": "hyper_small",
+  "nodes": [
+    {
+      "id": "HFILE1",
+      "kind": "file",
+      "label": "a.txt",
+      "data": {
+        "path": "src/a.txt",
+        "repo": "repo1"
+      }
+    },
+    {
+      "id": "HFILE2",
+      "kind": "file",
+      "label": "b.txt",
+      "data": {
+        "path": "src/b.txt",
+        "repo": "repo1"
+      }
+    },
+    {
+      "id": "HFILE3",
+      "kind": "file",
+      "label": "c.txt",
+      "data": {
+        "path": "lib/c.txt",
+        "repo": "repo2"
+      }
+    },
+    {
+      "id": "FILE:/Users/jobs/Desktop/repo1/src/a.txt",
+      "kind": "file",
+      "label": "a.txt",
+      "data": {
+        "source": "mission_graph"
+      }
+    },
+    {
+      "id": "FILE:/Users/jobs/Desktop/repo1/src/b.txt",
+      "kind": "file",
+      "label": "b.txt",
+      "data": {
+        "source": "mission_graph"
+      }
+    },
+    {
+      "id": "FILE:/Users/jobs/Desktop/repo2/lib/c.txt",
+      "kind": "file",
+      "label": "c.txt",
+      "data": {
+        "source": "mission_graph"
+      }
+    },
+    {
+      "id": "DIR:/Users/jobs/Desktop/repo1",
+      "kind": "dir",
+      "label": "repo1",
+      "data": {
+        "source": "mission_graph"
+      }
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "mission:0",
+      "kind": "contains",
+      "causes": [
+        "DIR:/Users/jobs/Desktop/repo1"
+      ],
+      "effects": [
+        "FILE:/Users/jobs/Desktop/repo1/src/a.txt"
+      ],
+      "data": {
+        "source": "mission_graph"
+      }
+    },
+    {
+      "id": "mission_ref:0",
+      "kind": "mission_ref",
+      "causes": [
+        "HFILE1"
+      ],
+      "effects": [
+        "FILE:/Users/jobs/Desktop/repo1/src/a.txt"
+      ],
+      "data": {
+        "match": "repo+path"
+      }
+    },
+    {
+      "id": "mission_ref:1",
+      "kind": "mission_ref",
+      "causes": [
+        "HFILE2"
+      ],
+      "effects": [
+        "FILE:/Users/jobs/Desktop/repo1/src/b.txt"
+      ],
+      "data": {
+        "match": "repo+path"
+      }
+    },
+    {
+      "id": "mission_ref:2",
+      "kind": "mission_ref",
+      "causes": [
+        "HFILE3"
+      ],
+      "effects": [
+        "FILE:/Users/jobs/Desktop/repo2/lib/c.txt"
+      ],
+      "data": {
+        "match": "repo+path"
+      }
+    }
+  ],
+  "metadata": {
+    "run_id": "test+mission",
+    "generated_at": "2026-01-19T19:17:26.862749+00:00",
+    "source": "fixture+mission_graph"
+  }
+}

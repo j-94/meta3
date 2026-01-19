@@ -1,0 +1,372 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Meta3 Hypergraph</title>
+  <style>
+    :root {{
+      --bg: #070813;
+      --panel: rgba(16, 19, 38, 0.86);
+      --panel2: rgba(16, 19, 38, 0.62);
+      --border: rgba(120, 160, 255, 0.22);
+      --text: #e9efff;
+      --muted: #9fb2d8;
+      --accent: #7aa7ff;
+      --hot: #ff5d8f;
+      --ok: #41d6b2;
+      --warn: #ffd166;
+    }}
+    html, body {{ height: 100%; }}
+    body {{
+      margin: 0;
+      overflow: hidden;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      background:
+        radial-gradient(1200px 800px at 20% 30%, rgba(122,167,255,0.18), transparent 55%),
+        radial-gradient(900px 650px at 80% 70%, rgba(255,93,143,0.14), transparent 50%),
+        var(--bg);
+      color: var(--text);
+    }}
+    #hud {{
+      position: fixed; inset: 12px 12px auto 12px;
+      display: grid; grid-template-columns: 1fr auto;
+      gap: 10px; align-items: start; z-index: 10;
+      pointer-events: none;
+    }}
+    #card {{
+      pointer-events: auto;
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      backdrop-filter: blur(10px);
+      border-radius: 14px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+      min-width: 320px;
+    }}
+    #title {{ font-weight: 800; letter-spacing: 0.3px; }}
+    #subtitle {{ color: var(--muted); font-size: 12px; margin-top: 2px; }}
+    #metrics {{ margin-top: 10px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }}
+    .m {{ padding: 10px; border-radius: 12px; background: var(--panel2); border: 1px solid rgba(255,255,255,0.06); }}
+    .mv {{ font-size: 18px; font-weight: 800; }}
+    .ml {{ font-size: 11px; color: var(--muted); margin-top: 2px; }}
+    #controls {{ margin-top: 10px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }}
+    .btn {{ pointer-events: auto; cursor: pointer; border: 1px solid var(--border); background: rgba(9, 12, 24, 0.65); color: var(--text); padding: 8px 10px; border-radius: 12px; font-size: 12px; }}
+    .btn:hover {{ border-color: rgba(122,167,255,0.6); }}
+    #turnWrap {{ pointer-events: auto; display: flex; gap: 8px; align-items: center; }}
+    #turn {{ width: 260px; }}
+    #links {{ pointer-events: auto; display: flex; gap: 10px; justify-content: flex-end; }}
+    #links a {{ color: var(--accent); text-decoration: none; font-size: 12px; padding: 9px 10px; border-radius: 12px; border: 1px solid var(--border); background: rgba(9, 12, 24, 0.65); }}
+    #links a:hover {{ border-color: rgba(122,167,255,0.6); }}
+    #canvas {{ position: fixed; inset: 0; }}
+    #tip {{
+      position: fixed; left: 0; top: 0; transform: translate(-9999px, -9999px);
+      max-width: 420px;
+      padding: 10px 12px;
+      background: rgba(8, 10, 20, 0.92);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      font-size: 12px;
+      color: var(--text);
+      box-shadow: 0 12px 26px rgba(0,0,0,0.45);
+      white-space: pre-wrap;
+      z-index: 20;
+      pointer-events: none;
+    }}
+    #tip .k {{ color: var(--muted); font-size: 11px; }}
+    #hint {{ position: fixed; right: 12px; bottom: 12px; padding: 10px 12px; border: 1px solid rgba(255,255,255,0.08); background: rgba(16,19,38,0.6); border-radius: 12px; color: var(--muted); font-size: 12px; }}
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <div id="hud">
+    <div id="card">
+      <div id="title">Meta3 Hypergraph</div>
+      <div id="subtitle">Hierarchical causal structure (run → goal → turns → tools → outcomes).</div>
+      <div id="metrics">
+        <div class="m"><div class="mv" id="mNodes">–</div><div class="ml">Nodes</div></div>
+        <div class="m"><div class="mv" id="mEdges">–</div><div class="ml">Causal Links</div></div>
+        <div class="m"><div class="mv" id="mCx">–</div><div class="ml">Complexity (E/N)</div></div>
+        <div class="m"><div class="mv" id="mMerge">–</div><div class="ml">Confluence</div></div>
+      </div>
+      <div id="controls">
+        <button class="btn" id="btnPulse">Pulse</button>
+        <button class="btn" id="btnReset">Recenter</button>
+        <div id="turnWrap">
+          <span style="color:var(--muted); font-size:12px;">Turn</span>
+          <input id="turn" type="range" min="0" max="0" value="0" />
+          <span id="turnVal" style="font-size:12px; color:var(--muted);">0</span>
+        </div>
+      </div>
+    </div>
+    <div id="links">
+      <a id="aJson" href="#">hypergraph.json</a>
+      <a id="aDot" href="#">hypergraph.dot</a>
+    </div>
+  </div>
+  <div id="tip"></div>
+  <div id="hint">Drag to pan · Wheel to zoom · Hover for details · Turn slider = hierarchy</div>
+  <script>
+    const GRAPH = {"id":"hyper_small","nodes":[{"id":"HFILE1","kind":"file","label":"a.txt","data":{"path":"src/a.txt","repo":"repo1"}},{"id":"HFILE2","kind":"file","label":"b.txt","data":{"path":"src/b.txt","repo":"repo1"}},{"id":"HFILE3","kind":"file","label":"c.txt","data":{"path":"lib/c.txt","repo":"repo2"}},{"id":"FILE:/Users/jobs/Desktop/repo1/src/a.txt","kind":"file","label":"a.txt","data":{"source":"mission_graph"}},{"id":"FILE:/Users/jobs/Desktop/repo1/src/b.txt","kind":"file","label":"b.txt","data":{"source":"mission_graph"}},{"id":"FILE:/Users/jobs/Desktop/repo2/lib/c.txt","kind":"file","label":"c.txt","data":{"source":"mission_graph"}},{"id":"DIR:/Users/jobs/Desktop/repo1","kind":"dir","label":"repo1","data":{"source":"mission_graph"}}],"hyperedges":[{"id":"mission:0","kind":"contains","causes":["DIR:/Users/jobs/Desktop/repo1"],"effects":["FILE:/Users/jobs/Desktop/repo1/src/a.txt"],"data":{"source":"mission_graph"}},{"id":"mission_ref:0","kind":"mission_ref","causes":["HFILE1"],"effects":["FILE:/Users/jobs/Desktop/repo1/src/a.txt"],"data":{"match":"repo+path"}},{"id":"mission_ref:1","kind":"mission_ref","causes":["HFILE2"],"effects":["FILE:/Users/jobs/Desktop/repo1/src/b.txt"],"data":{"match":"repo+path"}},{"id":"mission_ref:2","kind":"mission_ref","causes":["HFILE3"],"effects":["FILE:/Users/jobs/Desktop/repo2/lib/c.txt"],"data":{"match":"repo+path"}}],"metadata":{"run_id":"test+mission","generated_at":"2026-01-19T19:17:26.862749+00:00","source":"fixture+mission_graph"}};
+    const DOT = "digraph G {\n  rankdir=LR;\n  node [shape=box, style=filled, fontname=\"Helvetica\"];\n  \"HFILE1\" [label=\"a.txt\", fillcolor=\"#A3B18A\"];\n  \"HFILE2\" [label=\"b.txt\", fillcolor=\"#A3B18A\"];\n  \"HFILE3\" [label=\"c.txt\", fillcolor=\"#A3B18A\"];\n  \"FILE:/Users/jobs/Desktop/repo1/src/a.txt\" [label=\"a.txt\", fillcolor=\"#A3B18A\"];\n  \"FILE:/Users/jobs/Desktop/repo1/src/b.txt\" [label=\"b.txt\", fillcolor=\"#A3B18A\"];\n  \"FILE:/Users/jobs/Desktop/repo2/lib/c.txt\" [label=\"c.txt\", fillcolor=\"#A3B18A\"];\n  \"DIR:/Users/jobs/Desktop/repo1\" [label=\"repo1\", fillcolor=\"#A3B18A\"];\n  \"DIR:/Users/jobs/Desktop/repo1\" -> \"FILE:/Users/jobs/Desktop/repo1/src/a.txt\" [label=\"contains\", style=solid];\n  \"HFILE1\" -> \"FILE:/Users/jobs/Desktop/repo1/src/a.txt\" [label=\"mission_ref\", style=solid];\n  \"HFILE2\" -> \"FILE:/Users/jobs/Desktop/repo1/src/b.txt\" [label=\"mission_ref\", style=solid];\n  \"HFILE3\" -> \"FILE:/Users/jobs/Desktop/repo2/lib/c.txt\" [label=\"mission_ref\", style=solid];\n}\n";
+    const COLORS = {{
+      run: "#ff8fab",
+      goal: "#41d6b2",
+      turn: "#7aa7ff",
+      thought: "#ffd166",
+      tool_call: "#b8c0ff",
+      tool_result: "#e9efff",
+      artifact_path: "#ffb703",
+      other: "#a3b18a"
+    }};
+    const BASE_MASS = {{
+      run: 120, goal: 100, turn: 70, thought: 60,
+      tool_call: 55, tool_result: 45, artifact_path: 80, other: 40
+    }};
+    function clamp(v,a,b){{return Math.max(a,Math.min(b,v));}}
+    function nodeTurn(n){{
+      const d = n.data || {{}};
+      if (typeof d.turn === "number") return d.turn;
+      if (typeof d.index === "number") return d.index;
+      return 0;
+    }}
+    function nodeMass(n, deg){{
+      const kind = n.kind || "other";
+      let m = BASE_MASS[kind] || BASE_MASS.other;
+      const d = n.data || {{}};
+      const text = (d.full_text || d.text || "");
+      const textBoost = Math.log1p(String(text).length / 120) * 35;
+      const degreeBoost = Math.log1p(deg) * 18;
+      return m + textBoost + degreeBoost;
+    }}
+    function edgeWeight(e){{
+      let w = 1;
+      if (e.kind === "tool_effect") w += 0.8;
+      if (e.kind === "invocation") w += 0.5;
+      if (e.kind === "turn_exec") w += 0.3;
+      const allowed = e.data && e.data.allowed;
+      if (allowed === false) w += 1.4;
+      w += clamp((e.effects?.length || 0) * 0.15, 0, 1.2);
+      return w;
+    }}
+    function fmt2(x){{
+      if (!isFinite(x)) return "–";
+      return (Math.round(x*100)/100).toFixed(2);
+    }}
+    function build(graph){{
+      const nodes = graph.nodes || [];
+      const hyperedges = graph.hyperedges || [];
+      const byId = new Map(nodes.map(n => [n.id, n]));
+      const indeg = new Map();
+      const outdeg = new Map();
+      const edges = [];
+      for (const he of hyperedges) {{
+        const w = edgeWeight(he);
+        for (const c of (he.causes || [])) {{
+          for (const t of (he.effects || [])) {{
+            if (!byId.has(c) || !byId.has(t)) continue;
+            edges.push({{ s: c, t, kind: he.kind || "edge", w, he }});
+            indeg.set(t, (indeg.get(t)||0)+1);
+            outdeg.set(c, (outdeg.get(c)||0)+1);
+          }}
+        }}
+      }}
+      const degree = new Map();
+      for (const n of nodes) degree.set(n.id, (indeg.get(n.id)||0)+(outdeg.get(n.id)||0));
+      let mergeN = 0;
+      for (const n of nodes) if ((indeg.get(n.id)||0) >= 2) mergeN++;
+      let maxTurn = 0;
+      for (const n of nodes) maxTurn = Math.max(maxTurn, nodeTurn(n));
+      const simNodes = nodes.map((n,i) => {{
+        const d = degree.get(n.id) || 0;
+        const m = nodeMass(n,d);
+        const r = clamp(2.5 + Math.sqrt(m) * 0.35, 3, 22);
+        const t = nodeTurn(n);
+        const ang = i*0.37 + t*0.8;
+        const rad = 40 + t*70 + (i % 7) * 18;
+        return {{ id: n.id, n, turn: t, mass: m, r, x: Math.cos(ang)*rad, y: Math.sin(ang)*rad, vx:0, vy:0 }};
+      }});
+      const simIndex = new Map(simNodes.map(sn => [sn.id, sn]));
+      const simEdges = edges.map(e => ({{ a: simIndex.get(e.s), b: simIndex.get(e.t), kind: e.kind, w: e.w, he: e.he }})).filter(e => e.a && e.b);
+      return {{ graph, nodes, hyperedges, edges, simNodes, simEdges, indeg, outdeg, mergeN, maxTurn }};
+    }}
+    function renderer(state){{
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+      const tip = document.getElementById("tip");
+      let width=0, height=0, dpr=1;
+      function resize(){{
+        dpr = window.devicePixelRatio || 1;
+        width = window.innerWidth; height = window.innerHeight;
+        canvas.style.width = width+"px"; canvas.style.height = height+"px"; canvas.style.display="block";
+        canvas.width = Math.floor(width*dpr); canvas.height = Math.floor(height*dpr);
+        ctx.setTransform(dpr,0,0,dpr,0,0);
+      }}
+      resize(); window.addEventListener("resize", resize);
+      const cam = {{ x: width/2, y: height/2, s: 1.0 }};
+      const pan = {{ down:false, x:0, y:0, cx:0, cy:0 }};
+      canvas.addEventListener("mousedown", (e)=>{{ pan.down=true; pan.x=e.clientX; pan.y=e.clientY; pan.cx=cam.x; pan.cy=cam.y; }});
+      window.addEventListener("mouseup", ()=>{{ pan.down=false; }});
+      window.addEventListener("mousemove", (e)=>{{ if(pan.down){{ cam.x=pan.cx+(e.clientX-pan.x); cam.y=pan.cy+(e.clientY-pan.y); }} }});
+      canvas.addEventListener("wheel",(e)=>{{
+        e.preventDefault();
+        const k = Math.exp(-e.deltaY*0.0012);
+        const s2 = clamp(cam.s*k, 0.18, 3.5);
+        const mx=e.clientX,my=e.clientY;
+        const wx=(mx-cam.x)/cam.s, wy=(my-cam.y)/cam.s;
+        cam.x = mx - wx*s2; cam.y = my - wy*s2; cam.s = s2;
+      }}, {{ passive:false }});
+      const ui = {{ maxTurn: state.maxTurn, turn: state.maxTurn, pulse: true }};
+      const turnEl = document.getElementById("turn");
+      const turnVal = document.getElementById("turnVal");
+      turnEl.max = String(state.maxTurn);
+      turnEl.value = String(state.maxTurn);
+      turnVal.textContent = String(state.maxTurn);
+      turnEl.addEventListener("input",()=>{{ ui.turn = Number(turnEl.value || "0"); turnVal.textContent = String(ui.turn); }});
+      document.getElementById("btnPulse").addEventListener("click",()=>{{ ui.pulse=!ui.pulse; }});
+      document.getElementById("btnReset").addEventListener("click",()=>{{ cam.x=width/2; cam.y=height/2; cam.s=1.0; }});
+      function visible(sn){{ if (sn.n.kind==="run"||sn.n.kind==="goal") return true; return sn.turn<=ui.turn; }}
+      function screen(sn){{ return {{ sx: cam.x + sn.x*cam.s, sy: cam.y + sn.y*cam.s }}; }}
+      let hover=null;
+      window.addEventListener("mousemove",(e)=>{{
+        const mx=e.clientX,my=e.clientY;
+        const wx=(mx-cam.x)/cam.s, wy=(my-cam.y)/cam.s;
+        let best=null,bestD=1e9;
+        for(const sn of state.simNodes){{
+          if(!visible(sn)) continue;
+          const dx=sn.x-wx, dy=sn.y-wy;
+          const d2=dx*dx+dy*dy;
+          const rr=(sn.r+6)**2;
+          if(d2<rr && d2<bestD){{ bestD=d2; best=sn; }}
+        }}
+        hover=best;
+        if(!hover){{ tip.style.transform="translate(-9999px,-9999px)"; return; }}
+        const n=hover.n, d=n.data||{{}};
+        const text=d.full_text||d.text||"";
+        const label=n.label||n.kind||"node";
+        const meta=[`kind: ${{n.kind}}`, `turn: ${{hover.turn}}`].join(" · ");
+        tip.innerHTML = `<div style="font-weight:800;">${{label.replace(/</g,"&lt;")}}</div>` +
+                        `<div class="k">${{meta.replace(/</g,"&lt;")}}</div>` +
+                        (text ? `<div style="margin-top:8px;">${{String(text).slice(0,420).replace(/</g,"&lt;")}}${{String(text).length>420?"…":""}}</div>` : "");
+        tip.style.transform = `translate(${{Math.min(mx+14, width-440)}}px, ${{Math.min(my+14, height-240)}}px)`;
+      }});
+      function stepPhysics(dt){{
+        const nodes=state.simNodes, edges=state.simEdges;
+        const cell=110; const grid=new Map(); const key=(ix,iy)=>ix+","+iy;
+        for(const n of nodes){{ if(!visible(n)) continue; const ix=Math.floor(n.x/cell), iy=Math.floor(n.y/cell); const k=key(ix,iy); if(!grid.has(k)) grid.set(k,[]); grid.get(k).push(n); }}
+        const repK=2200;
+        for(const n of nodes){{
+          if(!visible(n)) continue;
+          const ix=Math.floor(n.x/cell), iy=Math.floor(n.y/cell);
+          for(let dx=-1; dx<=1; dx++) for(let dy=-1; dy<=1; dy++) {{
+            const bucket=grid.get(key(ix+dx,iy+dy)); if(!bucket) continue;
+            for(const m of bucket){{ if(m===n) continue; const vx=n.x-m.x, vy=n.y-m.y; const d2=vx*vx+vy*vy+0.01; const min=(n.r+m.r)*1.2; const min2=min*min; const f=(d2<min2)?(repK/d2)*1.6:(repK/d2); n.vx += (vx/Math.sqrt(d2))*f*dt; n.vy += (vy/Math.sqrt(d2))*f*dt; }}
+          }}
+        }}
+        const spring=0.018;
+        for(const e of edges){{
+          if(!visible(e.a)||!visible(e.b)) continue;
+          const dx=e.b.x-e.a.x, dy=e.b.y-e.a.y;
+          const dist=Math.sqrt(dx*dx+dy*dy)+0.01;
+          const desired=80+(e.a.r+e.b.r)*1.2;
+          const f=(dist-desired)*spring*(0.6+e.w);
+          const fx=(dx/dist)*f, fy=(dy/dist)*f;
+          e.a.vx += fx*dt; e.a.vy += fy*dt; e.b.vx -= fx*dt; e.b.vy -= fy*dt;
+        }}
+        for(const n of nodes){{
+          if(!visible(n)) continue;
+          const t=n.turn;
+          const targetR=40+t*75;
+          const ang=(Math.atan2(n.y,n.x)+Math.PI*2)%(Math.PI*2);
+          const tx=Math.cos(ang)*targetR, ty=Math.sin(ang)*targetR;
+          n.vx += (tx-n.x)*0.0025*dt;
+          n.vy += (ty-n.y)*0.0025*dt;
+        }}
+        for(const n of nodes){{
+          if(!visible(n)) continue;
+          const damp=0.86 - clamp((n.mass/500)*0.18,0,0.22);
+          n.vx *= damp; n.vy *= damp; n.x += n.vx*dt; n.y += n.vy*dt;
+        }}
+      }}
+      let pulseT=0;
+      function draw(dt){{
+        ctx.clearRect(0,0,width,height);
+        ctx.globalAlpha=0.15; ctx.fillStyle="#ffffff";
+        for(let i=0;i<120;i++){{ const x=(i*9973)%width; const y=(i*5419)%height; ctx.fillRect(x,y,1,1); }}
+        ctx.globalAlpha=1;
+        ctx.lineWidth=1;
+        for(const e of state.simEdges){{
+          if(!visible(e.a)||!visible(e.b)) continue;
+          const A=screen(e.a), B=screen(e.b);
+          const col=(e.kind==="tool_effect")?"rgba(122,167,255,0.26)":
+                    (e.kind==="flow")?"rgba(255,209,102,0.22)":
+                    (e.kind==="invocation")?"rgba(255,93,143,0.22)":
+                    "rgba(233,239,255,0.14)";
+          ctx.strokeStyle=col;
+          ctx.lineWidth=clamp(0.6+e.w*0.55,0.7,2.6);
+          ctx.beginPath(); ctx.moveTo(A.sx,A.sy);
+          const mx=(A.sx+B.sx)/2, my=(A.sy+B.sy)/2;
+          const nx=(B.sy-A.sy)*0.06, ny=(A.sx-B.sx)*0.06;
+          ctx.quadraticCurveTo(mx+nx,my+ny,B.sx,B.sy);
+          ctx.stroke();
+        }}
+        if(ui.pulse){{
+          pulseT += dt*0.0015;
+          for(let i=0; i<state.simEdges.length; i+=6){{
+            const e=state.simEdges[i];
+            if(!visible(e.a)||!visible(e.b)) continue;
+            const A=screen(e.a), B=screen(e.b);
+            const t=(pulseT+i*0.017)%1;
+            const x=A.sx+(B.sx-A.sx)*t, y=A.sy+(B.sy-A.sy)*t;
+            ctx.fillStyle="rgba(255,93,143,0.55)";
+            ctx.beginPath(); ctx.arc(x,y,1.1+e.w*0.7,0,Math.PI*2); ctx.fill();
+          }}
+        }}
+        for(const sn of state.simNodes){{
+          if(!visible(sn)) continue;
+          const {{sx,sy}}=screen(sn);
+          const kind=sn.n.kind||"other";
+          const col=COLORS[kind]||COLORS.other;
+          const glow=clamp(sn.mass/260,0.2,1.2);
+          ctx.globalAlpha=0.22; ctx.fillStyle=col;
+          ctx.beginPath(); ctx.arc(sx,sy,sn.r*(1.8+glow),0,Math.PI*2); ctx.fill();
+          ctx.globalAlpha=1;
+          ctx.fillStyle=col;
+          ctx.beginPath(); ctx.arc(sx,sy,sn.r,0,Math.PI*2); ctx.fill();
+          if(hover && hover.id===sn.id){{
+            ctx.strokeStyle="rgba(255,255,255,0.9)";
+            ctx.lineWidth=2; ctx.beginPath(); ctx.arc(sx,sy,sn.r+5,0,Math.PI*2); ctx.stroke();
+          }}
+        }}
+      }}
+      let last=performance.now();
+      function frame(now){{
+        const dt=now-last; last=now;
+        for(let i=0;i<2;i++) stepPhysics(dt*0.55);
+        draw(dt);
+        requestAnimationFrame(frame);
+      }}
+      requestAnimationFrame(frame);
+      return {{ cam, ui }};
+    }}
+    function download(name, text) {{
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(new Blob([text], {{type:"application/octet-stream"}}));
+      a.download = name;
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(a.href), 2500);
+    }}
+    function main(){{
+      const state = build(GRAPH);
+      document.getElementById("mNodes").textContent = String(state.nodes.length);
+      document.getElementById("mEdges").textContent = String(state.edges.length);
+      document.getElementById("mCx").textContent = fmt2(state.edges.length / Math.max(1, state.nodes.length));
+      document.getElementById("mMerge").textContent = fmt2(state.mergeN / Math.max(1, state.nodes.length));
+      document.getElementById("aJson").onclick = (e)=>{{ e.preventDefault(); download("hypergraph.json", JSON.stringify(GRAPH, null, 2)); }};
+      document.getElementById("aDot").onclick = (e)=>{{ e.preventDefault(); download("hypergraph.dot", DOT); }};
+      renderer(state);
+    }}
+    main();
+  </script>
+</body>
+</html>

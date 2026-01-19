@@ -1,0 +1,29 @@
+{
+  "id": "hyper_small",
+  "nodes": [
+    {
+      "id": "HFILE1",
+      "kind": "file",
+      "label": "a.txt",
+      "data": {"repo": "repo1", "path": "src/a.txt"}
+    },
+    {
+      "id": "HFILE2",
+      "kind": "file",
+      "label": "b.txt",
+      "data": {"repo": "repo1", "path": "src/b.txt"}
+    },
+    {
+      "id": "HFILE3",
+      "kind": "file",
+      "label": "c.txt",
+      "data": {"repo": "repo2", "path": "lib/c.txt"}
+    }
+  ],
+  "hyperedges": [],
+  "metadata": {
+    "run_id": "test",
+    "generated_at": "2026-01-01T00:00:00Z",
+    "source": "fixture"
+  }
+}

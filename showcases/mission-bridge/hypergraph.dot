@@ -1,0 +1,15 @@
+digraph G {
+  rankdir=LR;
+  node [shape=box, style=filled, fontname="Helvetica"];
+  "HFILE1" [label="a.txt", fillcolor="#A3B18A"];
+  "HFILE2" [label="b.txt", fillcolor="#A3B18A"];
+  "HFILE3" [label="c.txt", fillcolor="#A3B18A"];
+  "FILE:/Users/jobs/Desktop/repo1/src/a.txt" [label="a.txt", fillcolor="#A3B18A"];
+  "FILE:/Users/jobs/Desktop/repo1/src/b.txt" [label="b.txt", fillcolor="#A3B18A"];
+  "FILE:/Users/jobs/Desktop/repo2/lib/c.txt" [label="c.txt", fillcolor="#A3B18A"];
+  "DIR:/Users/jobs/Desktop/repo1" [label="repo1", fillcolor="#A3B18A"];
+  "DIR:/Users/jobs/Desktop/repo1" -> "FILE:/Users/jobs/Desktop/repo1/src/a.txt" [label="contains", style=solid];
+  "HFILE1" -> "FILE:/Users/jobs/Desktop/repo1/src/a.txt" [label="mission_ref", style=solid];
+  "HFILE2" -> "FILE:/Users/jobs/Desktop/repo1/src/b.txt" [label="mission_ref", style=solid];
+  "HFILE3" -> "FILE:/Users/jobs/Desktop/repo2/lib/c.txt" [label="mission_ref", style=solid];
+}

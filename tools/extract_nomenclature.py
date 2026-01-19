@@ -231,6 +231,7 @@ class Concept:
     id: str
     term: str
     definition: str
+    category: str
     aliases: List[str]
     sources: List[SourceRef]
 
@@ -297,12 +298,23 @@ def ensure_seed_terms(concepts: List[Concept], curation: Dict[str, Any]) -> List
             id=f"concept:{slugify(term)}",
             term=term,
             definition=str(definitions.get(term, "")).strip() if isinstance(definitions, dict) else "",
+            category="concept",
             aliases=sorted({str(a).strip() for a in (aliases.get(term, []) if isinstance(aliases, dict) else []) if str(a).strip()}),
             sources=[SourceRef(path="(curation)", kind="curation")],
         )
         out.append(c)
         have.add(term)
     return sorted(out, key=lambda c: c.id)
+
+def apply_taxonomy(concepts: List[Concept], catalog_types: Set[str]) -> List[Concept]:
+    # Mark known catalog type labels as taxonomy, plus any concept whose definition
+    # is the catalog-type placeholder.
+    for c in concepts:
+        if c.term in catalog_types:
+            c.category = "taxonomy"
+        if c.definition.strip() == "A capability classification used in the catalog.":
+            c.category = "taxonomy"
+    return concepts
 
 
 def merge_concept(
@@ -318,6 +330,7 @@ def merge_concept(
             id=cid,
             term=term,
             definition=definition.strip(),
+            category="concept",
             aliases=sorted({a for a in (aliases or []) if a and a != term}),
             sources=[source],
         )
@@ -348,6 +361,21 @@ def extract_from_capabilities_catalog(path: Path) -> List[Tuple[str, str]]:
         cap_type = cap.get("type")
         if isinstance(cap_type, str) and cap_type.strip():
             out.append((cap_type.strip(), "A capability classification used in the catalog."))
+    return out
+
+
+def extract_catalog_types(path: Path) -> Set[str]:
+    data = load_json(path)
+    caps = data.get("capabilities") if isinstance(data, dict) else data
+    if not isinstance(caps, list):
+        return set()
+    out: Set[str] = set()
+    for cap in caps:
+        if not isinstance(cap, dict):
+            continue
+        cap_type = cap.get("type")
+        if isinstance(cap_type, str) and cap_type.strip():
+            out.add(cap_type.strip())
     return out
 
 
@@ -416,20 +444,50 @@ def render_glossary(concepts: List[Concept], run_id: str, engine_repo: str) -> s
     lines.append("")
     lines.append("This glossary is generated from engine repo data (capability catalogs + system docs).")
     lines.append("")
-    for c in concepts:
-        lines.append(f"## {c.term}")
+
+    taxonomy = [c for c in concepts if getattr(c, "category", "") == "taxonomy"]
+    core = [c for c in concepts if getattr(c, "category", "") != "taxonomy"]
+
+    if core:
+        lines.append("## Concepts")
         lines.append("")
-        if c.definition:
-            lines.append(c.definition)
-        else:
-            lines.append("_Definition pending (add/curate)._")
+        lines.append("Core concepts and capabilities (curated + derived).")
         lines.append("")
-        if c.aliases:
-            lines.append(f"- Aliases: {', '.join(f'`{a}`' for a in c.aliases)}")
-        lines.append("- Sources:")
-        for s in sorted(c.sources, key=lambda x: (x.kind, x.path)):
-            lines.append(f"  - `{s.path}` ({s.kind})")
+        for c in core:
+            lines.append(f"### {c.term}")
+            lines.append("")
+            if c.definition:
+                lines.append(c.definition)
+            else:
+                lines.append("_Definition pending (add/curate)._")
+            lines.append("")
+            if c.aliases:
+                lines.append(f"- Aliases: {', '.join(f'`{a}`' for a in c.aliases)}")
+            lines.append("- Sources:")
+            for s in sorted(c.sources, key=lambda x: (x.kind, x.path)):
+                lines.append(f"  - `{s.path}` ({s.kind})")
+            lines.append("")
+
+    if taxonomy:
+        lines.append("## Taxonomy")
         lines.append("")
+        lines.append("System vocabulary that is primarily categorical/typing information (kept separate from concepts).")
+        lines.append("")
+        for c in taxonomy:
+            lines.append(f"### {c.term}")
+            lines.append("")
+            if c.definition:
+                lines.append(c.definition)
+            else:
+                lines.append("_Definition pending (add/curate)._")
+            lines.append("")
+            if c.aliases:
+                lines.append(f"- Aliases: {', '.join(f'`{a}`' for a in c.aliases)}")
+            lines.append("- Sources:")
+            for s in sorted(c.sources, key=lambda x: (x.kind, x.path)):
+                lines.append(f"  - `{s.path}` ({s.kind})")
+            lines.append("")
+
     return "\n".join(lines).rstrip() + "\n"
 
 
@@ -454,10 +512,12 @@ def main() -> int:
     sources.append((engine_repo / "meta3-graph-core" / "SYSTEM_PROMPT.md", "graph_core_prompt"))
 
     concepts: Dict[str, Concept] = {}
+    catalog_types: Set[str] = set()
 
     # 1) Capabilities catalog -> capability names and types as concepts
     cat_path = engine_repo / args.catalog
     if cat_path.exists():
+        catalog_types = extract_catalog_types(cat_path)
         for term, desc in extract_from_capabilities_catalog(cat_path):
             t = normalize_term(term)
             if not t:
@@ -530,6 +590,7 @@ def main() -> int:
     concept_list = apply_curation(concept_list, curation)
     if curation:
         concept_list = ensure_seed_terms(concept_list, curation)
+    concept_list = apply_taxonomy(concept_list, catalog_types)
 
     payload = {
         "version": "v1",
@@ -549,6 +610,7 @@ def main() -> int:
                 "id": c.id,
                 "term": c.term,
                 "definition": c.definition,
+                "category": getattr(c, "category", "concept"),
                 "aliases": c.aliases,
                 "sources": [asdict(s) for s in c.sources],
             }

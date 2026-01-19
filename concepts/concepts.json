@@ -1,7 +1,7 @@
 {
   "version": "v1",
-  "run_id": "nomenclature-20260119T190125Z",
-  "generated_at": "2026-01-19T19:01:25Z",
+  "run_id": "nomenclature-20260119T191726Z",
+  "generated_at": "2026-01-19T19:17:26Z",
   "engine_repo": "/Users/jobs/Desktop/tmp-meta3-engine-test",
   "curation": {
     "path": "concepts/curation.json",
@@ -34,6 +34,7 @@
       "id": "concept:agi-solver",
       "term": "AGI Solver",
       "definition": "Optimal Path Finding",
+      "category": "concept",
       "aliases": [],
       "sources": [
         {
@@ -46,6 +47,7 @@
       "id": "concept:amplify-signal",
       "term": "amplify_signal",
       "definition": "Standalone Utility: amplify_signal",
+      "category": "concept",
       "aliases": [],
       "sources": [
         {
@@ -58,6 +60,7 @@
       "id": "concept:antigravity-history-explorer",
       "term": "antigravity_history_explorer",
       "definition": "Standalone Utility: antigravity_history_explorer",
+      "category": "concept",
       "aliases": [],
       "sources": [
         {
@@ -70,6 +73,7 @@
       "id": "concept:binary",
       "term": "binary",
       "definition": "A capability classification used in the catalog.",
+      "category": "taxonomy",
       "aliases": [],
       "sources": [
         {
@@ -82,6 +86,7 @@
       "id": "concept:capability-catalog",
       "term": "Capability Catalog",
       "definition": "A machine-readable list of what the system can do (capabilities), including triggers, types, and source modules.",
+      "category": "concept",
       "aliases": [
         "catalog"
       ],
@@ -96,6 +101,7 @@
       "id": "concept:capability-graph",
       "term": "Capability Graph",
       "definition": "A hypergraph derived from the capability catalog that links capabilities to triggers, types, and source modules (not a filesystem 'contains' graph).",
+      "category": "concept",
       "aliases": [
         "graph_capability_graph"
       ],
@@ -110,6 +116,7 @@
       "id": "concept:capability-report",
       "term": "capability_report",
       "definition": "generate English capability/module report (`meta3-graph-core/src/bin/capability_report.rs`)",
+      "category": "concept",
       "aliases": [],
       "sources": [
         {
@@ -122,6 +129,7 @@
       "id": "concept:capability-report-english",
       "term": "Capability Report (English)",
       "definition": "A human-readable report explaining what each capability/module does, how to invoke it, and where it is implemented.",
+      "category": "concept",
       "aliases": [
         "capability_report"
       ],
@@ -136,6 +144,7 @@
       "id": "concept:flux",
       "term": "flux",
       "definition": "Standalone Utility: flux",
+      "category": "concept",
       "aliases": [],
       "sources": [
         {
@@ -148,6 +157,7 @@
       "id": "concept:graph-capability-graph",
       "term": "graph_capability_graph",
       "definition": "build **catalog-focused** capability hypergraph (`meta3-graph-core/src/bin/graph_capability_graph.rs`)",
+      "category": "concept",
       "aliases": [],
       "sources": [
         {
@@ -160,6 +170,7 @@
       "id": "concept:graph-context-bundle",
       "term": "graph_context_bundle",
       "definition": "create context + tasks from a hypergraph (`meta3-graph-core/src/bin/graph_context_bundle.rs`)",
+      "category": "concept",
       "aliases": [],
       "sources": [
         {
@@ -172,6 +183,7 @@
       "id": "concept:graph-harness-emit",
       "term": "graph_harness_emit",
       "definition": "append harness/loop nodes for auditability (`meta3-graph-core/src/bin/graph_harness_emit.rs`)",
+      "category": "concept",
       "aliases": [],
       "sources": [
         {
@@ -184,6 +196,7 @@
       "id": "concept:graph-probe",
       "term": "graph_probe",
       "definition": "summarize a hypergraph (`meta3-graph-core/src/bin/graph_probe.rs`)",
+      "category": "concept",
       "aliases": [],
       "sources": [
         {
@@ -196,6 +209,7 @@
       "id": "concept:graph-transducer-runtime",
       "term": "Graph Transducer Runtime",
       "definition": "A runtime that consumes events, evaluates state transitions as graph deltas, validates them against invariants, and applies them while emitting durable evidence (receipts).",
+      "category": "concept",
       "aliases": [],
       "sources": [
         {
@@ -208,6 +222,7 @@
       "id": "concept:graphmutate",
       "term": "Graph.Mutate",
       "definition": "Propose graph update",
+      "category": "concept",
       "aliases": [],
       "sources": [
         {
@@ -220,6 +235,7 @@
       "id": "concept:graphquery",
       "term": "Graph.Query",
       "definition": "Query the State Hypergraph",
+      "category": "concept",
       "aliases": [],
       "sources": [
         {
@@ -232,6 +248,7 @@
       "id": "concept:hybrid-chat",
       "term": "Hybrid Chat",
       "definition": "LLM + Graph Tracking",
+      "category": "concept",
       "aliases": [],
       "sources": [
         {
@@ -244,6 +261,7 @@
       "id": "concept:hypergraph",
       "term": "HyperGraph",
       "definition": "Meta6 Abstract Machine",
+      "category": "concept",
       "aliases": [
         "State Hypergraph",
         "hypergraph"
@@ -263,6 +281,7 @@
       "id": "concept:interaction-hypergraph",
       "term": "interaction_hypergraph",
       "definition": "Standalone Utility: interaction_hypergraph",
+      "category": "concept",
       "aliases": [],
       "sources": [
         {
@@ -279,6 +298,7 @@
       "id": "concept:jit-verification",
       "term": "JIT Verification",
       "definition": "Just-in-time verification: validate proposed actions/deltas against invariants before execution, producing accept/reject decisions with evidence.",
+      "category": "concept",
       "aliases": [
         "Just-In-Time verification",
         "LeJIT"
@@ -294,6 +314,7 @@
       "id": "concept:kernel-interception",
       "term": "kernel_interception",
       "definition": "A capability classification used in the catalog.",
+      "category": "taxonomy",
       "aliases": [],
       "sources": [
         {
@@ -306,6 +327,7 @@
       "id": "concept:learning-solver",
       "term": "LEARNING SOLVER",
       "definition": "Heuristic + Multiway Verification",
+      "category": "concept",
       "aliases": [],
       "sources": [
         {
@@ -318,6 +340,7 @@
       "id": "concept:lejit",
       "term": "LeJIT",
       "definition": "Just-in-time verification layer that validates proposed actions/deltas against invariants before they are executed.",
+      "category": "concept",
       "aliases": [
         "JIT Verification",
         "Just-In-Time verification"
@@ -333,6 +356,7 @@
       "id": "concept:merge-mission-hypergraph",
       "term": "merge_mission_hypergraph",
       "definition": "merge `mission_graph.json` into a hypergraph (`meta3-graph-core/src/bin/merge_mission_hypergraph.rs`)",
+      "category": "concept",
       "aliases": [],
       "sources": [
         {
@@ -345,6 +369,7 @@
       "id": "concept:meta3-graph-core",
       "term": "Meta3 Graph Core",
       "definition": "Deterministic Rust kernel that reads ops packets / graph deltas and reifies them into reality with auditable receipts.",
+      "category": "concept",
       "aliases": [],
       "sources": [
         {
@@ -357,6 +382,7 @@
       "id": "concept:negentropy",
       "term": "negentropy",
       "definition": "Standalone Utility: negentropy",
+      "category": "concept",
       "aliases": [],
       "sources": [
         {
@@ -369,6 +395,7 @@
       "id": "concept:oracle",
       "term": "oracle",
       "definition": "Standalone Utility: oracle",
+      "category": "concept",
       "aliases": [],
       "sources": [
         {
@@ -381,6 +408,7 @@
       "id": "concept:receipts-beat-recollection",
       "term": "Receipts Beat Recollection",
       "definition": "Operational rule: don\u2019t rely on memory. Every claim and state change should be backed by an artifact (receipt, graph packet, report).",
+      "category": "concept",
       "aliases": [
         "immutable evidence",
         "receipts"
@@ -396,6 +424,7 @@
       "id": "concept:render-hypergraph",
       "term": "render_hypergraph",
       "definition": "render a hypergraph to self-contained HTML (`meta3-graph-core/src/bin/render_hypergraph.rs`)",
+      "category": "concept",
       "aliases": [],
       "sources": [
         {
@@ -408,6 +437,7 @@
       "id": "concept:ruliad",
       "term": "Ruliad",
       "definition": "Formal Rewrite System - Wolfram Physics",
+      "category": "concept",
       "aliases": [],
       "sources": [
         {
@@ -420,6 +450,7 @@
       "id": "concept:state-hypergraph",
       "term": "State Hypergraph",
       "definition": "The state model of the system: nodes represent entities (files, concepts, artifacts, tasks) and hyperedges represent causal relationships that can connect multiple entities at once.",
+      "category": "concept",
       "aliases": [],
       "sources": [
         {
@@ -432,6 +463,7 @@
       "id": "concept:task-graph",
       "term": "Task Graph",
       "definition": "LLM-based Task Decomposition",
+      "category": "concept",
       "aliases": [],
       "sources": [
         {
@@ -444,6 +476,7 @@
       "id": "concept:thought-tree",
       "term": "Thought Tree",
       "definition": "ASCII Hierarchical Render",
+      "category": "concept",
       "aliases": [],
       "sources": [
         {
@@ -456,6 +489,7 @@
       "id": "concept:toolhub",
       "term": "ToolHub",
       "definition": "The capability scanner/catalog generator (ToolHub) used to enumerate available capabilities and tools.",
+      "category": "concept",
       "aliases": [],
       "sources": [
         {
@@ -468,6 +502,7 @@
       "id": "concept:tsp",
       "term": "TSP",
       "definition": "Traveling Salesman Problem - Ruliad Way",
+      "category": "concept",
       "aliases": [],
       "sources": [
         {
@@ -480,6 +515,7 @@
       "id": "concept:utir",
       "term": "UTIR",
       "definition": "Universal Tool Invocation Receipt: a structured evidence stream used to audit and reproduce actions (writes/execs) performed by the system.",
+      "category": "concept",
       "aliases": [
         "artifact stream",
         "receipts"
