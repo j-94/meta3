@@ -26,3 +26,12 @@ These are “muscle flex” demos: they produce **real artifacts** (English + gr
   - `showcases/mission-bridge/merged.hypergraph.json`
   - `showcases/mission-bridge/eval.json`
   - `showcases/mission-bridge/index.html` (self-contained viewer)
+
+## 4) TriBench (Engine End-to-End)
+
+- Purpose: run **code + agent + safety** tracks *in parallel* through the engine, producing receipts and a merged hypergraph viewer.
+- Artifacts:
+  - `showcases/tribench/utir.json`
+  - `showcases/tribench/utir/receipts/`
+  - `showcases/tribench/tribench.hypergraph.json`
+  - `showcases/tribench/tribench/index.html`
