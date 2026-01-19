@@ -1,0 +1,47 @@
+{
+  "version": "v1",
+  "generated_at": "2026-01-19T00:00:00Z",
+  "libraries": [
+    {
+      "id": "capability_graph",
+      "path": "canonical/libraries/capability_graph.md"
+    },
+    {
+      "id": "capability_report",
+      "path": "canonical/libraries/capability_report.md"
+    },
+    {
+      "id": "mission_merge",
+      "path": "canonical/libraries/mission_merge.md"
+    },
+    {
+      "id": "receipts_utir",
+      "path": "canonical/libraries/receipts_utir.md"
+    }
+  ],
+  "agents": [
+    {
+      "id": "mapper",
+      "path": "canonical/agents/mapper.system.md"
+    },
+    {
+      "id": "lens",
+      "path": "canonical/agents/lens.system.md"
+    },
+    {
+      "id": "evaluator",
+      "path": "canonical/agents/evaluator.system.md"
+    },
+    {
+      "id": "librarian",
+      "path": "canonical/agents/librarian.system.md"
+    }
+  ],
+  "graphs": [
+    {
+      "id": "canonical_core",
+      "path": "canonical/graphs/canonical_core.hypergraph.json"
+    }
+  ]
+}
+

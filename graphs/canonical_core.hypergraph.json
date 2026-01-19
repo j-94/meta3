@@ -1,0 +1,31 @@
+{
+  "id": "canonical_core",
+  "nodes": [
+    { "id": "CONCEPT:meta3_graph_core", "kind": "concept", "label": "Meta3 Graph Core", "data": { "path": "meta3-graph-core" } },
+    { "id": "CONCEPT:capability_catalog", "kind": "concept", "label": "Capability Catalog", "data": { "path": "dist/meta3-engine-v0.5.0/config/capabilities.json" } },
+    { "id": "CONCEPT:capability_graph", "kind": "concept", "label": "Capability Graph", "data": { "generator": "graph_capability_graph" } },
+    { "id": "CONCEPT:capability_report", "kind": "concept", "label": "Capability Report (English)", "data": { "generator": "capability_report" } },
+    { "id": "CONCEPT:receipts", "kind": "concept", "label": "Receipts / Evidence", "data": { "paths": ["engine/reports", "runs/_local/utir", "tmp"] } },
+    { "id": "AGENT:mapper", "kind": "agent", "label": "Mapper" },
+    { "id": "AGENT:lens", "kind": "agent", "label": "Lens" },
+    { "id": "AGENT:evaluator", "kind": "agent", "label": "Evaluator" },
+    { "id": "AGENT:librarian", "kind": "agent", "label": "Librarian" }
+  ],
+  "hyperedges": [
+    { "id": "edge:core_uses_catalog", "kind": "uses", "causes": ["CONCEPT:meta3_graph_core"], "effects": ["CONCEPT:capability_catalog"] },
+    { "id": "edge:catalog_derives_graph", "kind": "derives", "causes": ["CONCEPT:capability_catalog"], "effects": ["CONCEPT:capability_graph"] },
+    { "id": "edge:catalog_derives_report", "kind": "derives", "causes": ["CONCEPT:capability_catalog"], "effects": ["CONCEPT:capability_report"] },
+    { "id": "edge:graph_requires_receipts", "kind": "requires", "causes": ["CONCEPT:capability_graph"], "effects": ["CONCEPT:receipts"] },
+    { "id": "edge:report_requires_receipts", "kind": "requires", "causes": ["CONCEPT:capability_report"], "effects": ["CONCEPT:receipts"] },
+    { "id": "edge:mapper_owns_graph", "kind": "agent_owns", "causes": ["AGENT:mapper"], "effects": ["CONCEPT:capability_graph"] },
+    { "id": "edge:lens_owns_reports", "kind": "agent_owns", "causes": ["AGENT:lens"], "effects": ["CONCEPT:capability_report"] },
+    { "id": "edge:evaluator_owns_checks", "kind": "agent_owns", "causes": ["AGENT:evaluator"], "effects": ["CONCEPT:receipts"] },
+    { "id": "edge:librarian_owns_canon", "kind": "agent_owns", "causes": ["AGENT:librarian"], "effects": ["CONCEPT:meta3_graph_core"] }
+  ],
+  "metadata": {
+    "run_id": "canonical-20260119T000000Z",
+    "generated_at": "2026-01-19T00:00:00Z",
+    "source": "canonical"
+  }
+}
+

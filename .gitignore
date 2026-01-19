@@ -1,0 +1,13 @@
+.DS_Store
+.idea/
+.vscode/
+
+target/
+tmp/
+runs/
+trace/
+users/
+.chat_state/
+
+*.log
+
