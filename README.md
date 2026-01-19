@@ -1,19 +1,36 @@
-# Meta3 ∛ Nomenclature & Concepts (Canonical)
+# Meta3 (Canonical)
 
-This repo is the **canonical** home for standardizing Meta3’s reusable knowledge:
+This repo is the canonical home for **Meta3 nomenclature & concepts**, derived from engine repo data (catalogs + system docs) and then curated.
 
-1. **Use-case libraries**: distilled “how-to” modules (inputs → process → outputs → evidence).
-2. **Multi-agent role prompts**: stable agent roles that produce compatible artifacts.
-3. **Canonical intellectual graph**: a minimal, regenerable hypergraph describing the system’s core concepts.
+It contains:
+- **Nomenclature pipeline**: deterministic extraction + curation.
+- **Use-case libraries**: distilled “how-to” modules (inputs → process → outputs → evidence).
+- **Multi-agent role prompts**: stable agent roles that exchange artifacts.
+- **Concept graphs**: distilled hypergraphs (not filesystem scans).
 
 This is intended to be used alongside the main engine repo, but lives as a standalone GitHub repo.
 
 ## Layout
 
-- `canonical/libraries/` — use-case modules (Markdown)
-- `canonical/agents/` — role prompts (Markdown)
-- `canonical/graphs/` — canonical hypergraph seeds (JSON)
-- `canonical/index.json` — machine-readable index
+- `concepts/` — generated concepts + curated overrides
+- `libraries/` — use-case modules (Markdown)
+- `agents/` — role prompts (Markdown)
+- `graphs/` — distilled hypergraph outputs (JSON)
+- `index.json` — machine-readable index
+
+## Run End-to-End (Derive Concepts)
+
+From a checkout of this repo:
+
+```bash
+ENGINE_REPO=/path/to/meta3-engine-repo \
+./tools/run_extract_from_engine_repo.sh
+```
+
+Outputs:
+- `concepts/concepts.json`
+- `concepts/glossary.md`
+- `graphs/nomenclature.hypergraph.json`
 
 ## Quality Bar
 

@@ -1,7 +1,7 @@
 # Meta3 Nomenclature & Concepts
 
-Generated: `2026-01-19T18:41:41Z`
-Run: `nomenclature-20260119T184141Z`
+Generated: `2026-01-19T18:55:51Z`
+Run: `nomenclature-20260119T185551Z`
 Engine repo: `/Users/jobs/Desktop/tmp-meta3-engine-test`
 
 This glossary is generated from engine repo data (capability catalogs + system docs).
